@@ -14,13 +14,14 @@
 ; ===============================================================================================================================
 Func ParseAttackCSV($debug = False)
 
+	Local $rownum = 0
 	Local $bForceSideExist = False
 	Local $sErrorText, $sTargetVectors = ""
 	Local $iTroopIndex, $bWardenDrop = False
 ;====================== RK MOD ===========================
     For $v = 0 To 25 ; Zero all 26 vectors from last atttack in case here is error MAKE'ing new vectors
-        Assign("ATTACKVECTOR_" & Chr(65 + $v), "", $ASSIGN_EXISTFAIL) ; start with character "A" = ASCII 65
-        If @error Then SetLog("Failed to erase old vector: " & Chr(65 + $v) & ", ask code monkey to fix!", $COLOR_ERROR)
+		Assign("ATTACKVECTOR_" & Chr(65 + $v), "", $ASSIGN_EXISTFAIL) ; start with character "A" = ASCII 65
+		If @error Then SetLog("Failed to erase old vector: " & Chr(65 + $v) & ", ask code monkey to fix!", $COLOR_ERROR)
 	Next
 ;====================== RK MOD ===========================
 
@@ -40,6 +41,7 @@ Func ParseAttackCSV($debug = False)
 		; Read in lines of text until the EOF is reached
 		For $iLine = 0 To UBound($aLines) - 1
 			$line = $aLines[$iLine]
+			$rownum = $line + 1
 			$sErrorText = "" ; empty error text each row
 			debugAttackCSV("line: " & $iLine + 1)
 			If @error = -1 Then ExitLoop
@@ -125,8 +127,8 @@ Func ParseAttackCSV($debug = False)
 							$sErrorText = "value2"
 						EndIf
 						If $sErrorText <> "" Then ; log error message
-							SetLog("Discard row, bad " & $sErrorText & " parameter: row " & $iLine + 1)
-							debugAttackCSV("Discard row, bad " & $sErrorText & " parameter: row " & $iLine + 1)
+							SetLog("Discard row, bad " & $sErrorText & " parameter:row " & $rownum)
+							debugAttackCSV("Discard row, bad " & $sErrorText & " parameter:row " & $rownum)
 						Else ; debuglog vectors
 							For $i = 0 To UBound(Execute("$ATTACKVECTOR_" & $value1)) - 1
 								Local $pixel = Execute("$ATTACKVECTOR_" & $value1 & "[" & $i & "]")
@@ -163,96 +165,77 @@ Func ParseAttackCSV($debug = False)
 								EndIf
 							EndIf
 						EndIf
-;====================== RK MOD ===========================
-		; RK MOD				;qty...
-		; RK MOD				Local $qty1, $qty2, $qtyvect
-		; RK MOD				$qtyvect = StringSplit($value3, "-", 2)
-		; RK MOD				If UBound($qtyvect) > 1 Then
-		; RK MOD					If Int($qtyvect[0]) > 0 And Int($qtyvect[1]) > 0 Then
-		; RK MOD						$qty1 = Int($qtyvect[0])
-		; RK MOD						$qty2 = Int($qtyvect[1])
-                        ;;;;;;;;;;;;;;;;;;;;;
-                        ;QUANTITIES : With % DocOC Mod
-                        Local $qty1, $qty2, $qtyvect, $bUpdateQuantity = False
-                        If StringInStr($value3, "%") > 0 Then
-                            $qtyvect = StringSplit($value3, "%", 2)
-                            If UBound($qtyvect) > 0 Then
-                                Local $iPercentage = $qtyvect[0]
-                                If UBound($qtyvect) > 1 Then $bUpdateQuantity = (($qtyvect[1] = "U") ? True : False)
-                                Local $theTroopPosition = -2
+						;quantities : With %
+						Local $qty1, $qty2, $qtyvect, $bUpdateQuantity = False
+						If StringInStr($value3, "%") > 0 Then
+							$qtyvect = StringSplit($value3, "%", 2)
+							If UBound($qtyvect) > 0 Then
+								Local $iPercentage = $qtyvect[0]
+								If UBound($qtyvect) > 1 Then $bUpdateQuantity = (($qtyvect[1] = "U") ? True : False)
+								Local $theTroopPosition = -2
 
-                                ; Get the integer index of the troop name specified
-                                Local $troopName = $value4
-                                Local $iTroopIndex = TroopIndexLookup($troopName)
-                                If $iTroopIndex = -1 Then
-                                    Setlog("CSV CMD '%' troop name '" & $troopName & "' is unrecognized.")
-                                    Return
-                                EndIf
+								;get the integer index of the troop name specified
+								Local $troopName = $value4
+								Local $iTroopIndex = TroopIndexLookup($troopName)
+								If $iTroopIndex = -1 Then
+									SetLog("CSV CMD '%' troop name '" & $troopName & "' is unrecognized.")
+									Return
+								EndIf
 
-                                For $i = 0 To UBound($g_avAttackTroops) - 1
-                                    If $g_avAttackTroops[$i][0] = $iTroopIndex Then
-                                        $theTroopPosition = $i
-                                        ExitLoop
-                                    EndIf
-                                Next
-                                If $bUpdateQuantity = True Then
-                                    If $theTroopPosition >= 0 Then
-                                        SetLog("Updating Available " & NameOfTroop($iTroopIndex, 1) & " Quantities|*DocOC*", $COLOR_INFO)
-                                        $theTroopPosition = UpdateTroopQuantity($troopName)
-                                    EndIf
-                                EndIf
-                                If $theTroopPosition >= 0 And UBound($g_avAttackTroops) > $theTroopPosition Then
-                                    If Int($qtyvect[0]) > 0 Then
-                                        $qty1 = Round((Number($qtyvect[0]) / 100) * Number($g_avAttackTroops[Number($theTroopPosition)][1]))
-                                        $qty2 = $qty1
-                                        SetLog($qtyvect[0] & "% Of x" & Number($g_avAttackTroops[$theTroopPosition][1]) & " " & NameOfTroop($g_avAttackTroops[$theTroopPosition][0], 1) & " = " & $qty1, $COLOR_INFO)
-                                    Else
-                                        $index1 = 1
-                                        $qty2 = 1
-                                    EndIf
-                                Else
-                                    $qty1 = 0
-                                    $qty2 = 0
-                                EndIf
+								For $i = 0 To UBound($g_avAttackTroops) - 1
+									If $g_avAttackTroops[$i][0] = $iTroopIndex Then
+										$theTroopPosition = $i
+										ExitLoop
+									EndIf
+								Next
+								If $bUpdateQuantity = True Then
+									If $theTroopPosition >= 0 Then
+										SetLog("Updating Available " & NameOfTroop($iTroopIndex, 1) & " Quantities", $COLOR_INFO)
+										$theTroopPosition = UpdateTroopQuantity($troopName)
+									EndIf
+								EndIf
+								If $theTroopPosition >= 0 And UBound($g_avAttackTroops) > $theTroopPosition Then
+									If Int($qtyvect[0]) > 0 Then
+										$qty1 = Round((Number($qtyvect[0]) / 100) * Number($g_avAttackTroops[Number($theTroopPosition)][1]))
+										$qty2 = $qty1
+										SetLog($qtyvect[0] & "% Of x" & Number($g_avAttackTroops[$theTroopPosition][1]) & " " & NameOfTroop($g_avAttackTroops[$theTroopPosition][0], 1) & " = " & $qty1, $COLOR_INFO)
+									Else
+										$index1 = 1
+										$qty2 = 1
+									EndIf
+								Else
+									$qty1 = 0
+									$qty2 = 0
+								EndIf
 							Else
-		; RK MOD				$index1 = 1
-		; RK MOD				$qty2 = 1
-                                If Int($value3) > 0 Then
-                                    $qty1 = Int($value3)
-                                    $qty2 = Int($value3)
-                                Else
-                                    $qty1 = 1
-                                    $qty2 = 1
-                                EndIf
-
-						EndIf
+								If Int($value3) > 0 Then
+									$qty1 = Int($value3)
+									$qty2 = Int($value3)
+								Else
+									$qty1 = 1
+									$qty2 = 1
+								EndIf
+							EndIf
 						Else
-		; RK MOD			If Int($value3) > 0 Then
-		; RK MOD				$qty1 = Int($value3)
-		; RK MOD				$qty2 = Int($value3)
-                            $qtyvect = StringSplit($value3, "-", 2)
-                            If UBound($qtyvect) > 1 Then
-                                If Int($qtyvect[0]) > 0 And Int($qtyvect[1]) > 0 Then
-                                    $qty1 = Int($qtyvect[0])
-                                    $qty2 = Int($qtyvect[1])
-                                Else
-                                    $index1 = 1
-                                    $qty2 = 1
-                                EndIf
+							$qtyvect = StringSplit($value3, "-", 2)
+							If UBound($qtyvect) > 1 Then
+								If Int($qtyvect[0]) > 0 And Int($qtyvect[1]) > 0 Then
+									$qty1 = Int($qtyvect[0])
+									$qty2 = Int($qtyvect[1])
+								Else
+									$index1 = 1
+									$qty2 = 1
+								EndIf
 							Else
-					; RK MOD	$qty1 = 1
-					; RK MOD	$qty2 = 1
-
-                                If Int($value3) > 0 Then
-                                    $qty1 = Int($value3)
-                                    $qty2 = Int($value3)
-                                Else
-                                    $qty1 = 1
-                                    $qty2 = 1
-                                EndIf
-                            EndIf
-                        EndIf
-;====================== RK MOD ===========================
+								If Int($value3) > 0 Then
+									$qty1 = Int($value3)
+									$qty2 = Int($value3)
+								Else
+									$qty1 = 1
+									$qty2 = 1
+								EndIf
+							EndIf
+						EndIf
 						;delay between points
 						Local $delaypoints1, $delaypoints2, $delaypointsvect
 						$delaypointsvect = StringSplit($value5, "-", 2)
@@ -363,8 +346,8 @@ Func ParseAttackCSV($debug = False)
 							EndIf
 						Next
 						If $sErrorText <> "" Then
-							SetLog("Discard row, " & $sErrorText & ": row " & $iLine + 1)
-							debugAttackCSV("Discard row, " & $sErrorText & ": row " & $iLine + 1)
+								SetLog("Discard row, " & $sErrorText & " parameter:row " & $rownum)
+							debugAttackCSV("Discard row, " & $sErrorText & " parameter:row " & $rownum)
 						Else
 ; ============= RK MOD - REMAIN TROOPS CVS ========================
                             ; REMAIN CMD from @chalicucu | ProMac Updated 
@@ -452,10 +435,10 @@ Func ParseAttackCSV($debug = False)
 								$Trophies = getTrophyVillageSearch(48, 69 + 69)
 							EndIf
 							CheckHeroesHealth()
-							If $g_bDebugSetlog Then SetDebugLog("detected [G]: " & $Gold & " [E]: " & $Elixir & " [DE]: " & $DarkElixir, $COLOR_INFO)
+							If $g_bDebugSetlog Then SetLog("detected [G]: " & $Gold & " [E]: " & $Elixir & " [DE]: " & $DarkElixir, $COLOR_INFO)
 							;EXIT IF RESOURCES = 0
 							If $g_abStopAtkNoResources[$g_iMatchMode] And Number($Gold) = 0 And Number($Elixir) = 0 And Number($DarkElixir) = 0 Then
-								If NOT $g_bDebugSetlog Then SetDebugLog("detected [G]: " & $Gold & " [E]: " & $Elixir & " [DE]: " & $DarkElixir, $COLOR_INFO) ; log if not down above
+								If Not $g_bDebugSetlog Then SetDebugLog("detected [G]: " & $Gold & " [E]: " & $Elixir & " [DE]: " & $DarkElixir, $COLOR_INFO) ; log if not down above
 								SetDebugLog("From Attackcsv: Gold & Elixir & DE = 0, end battle ", $COLOR_DEBUG)
 								$exitNoResources = 1
 								ExitLoop
@@ -842,7 +825,7 @@ Func ParseAttackCSV($debug = False)
 						EndSwitch
 				EndSwitch
 			Else
-				If StringLeft($line, 7) <> "NOTE  |" And StringLeft($line, 7) <> "      |" And StringStripWS(StringUpper($line), 2) <> "" Then SetLog("attack row error, discard: row " & $iLine + 1, $COLOR_ERROR)
+				If StringLeft($line, 7) <> "NOTE  |" And StringLeft($line, 7) <> "      |" And StringStripWS(StringUpper($line), 2) <> "" Then Setlog("attack row error, discard: row " & $iLine + 1, $COLOR_ERROR)
 			EndIf
 			If $bWardenDrop = True Then  ;Check hero, but skip Warden if was dropped with sleepafter to short to allow icon update
 				Local $bHold = $g_bCheckWardenPower ; store existing flag state, should be true?

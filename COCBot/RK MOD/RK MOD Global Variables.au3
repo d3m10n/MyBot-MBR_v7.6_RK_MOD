@@ -83,3 +83,5 @@ Global Const $g_sImgSCIDAccs =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgAccs"
 Global Const $g_sImgSCIDOr =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgMIS\Or"
 
 Global $g_bChkAltuFaltuSCID = False        
+
+Global $g_iChkAutoCamp = 0

@@ -54,4 +54,6 @@ Func ReadConfig_RKMod()
 	
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
+	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
+	
 EndFunc   ;==>ReadConfig_RKMod

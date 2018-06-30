@@ -23,7 +23,7 @@ Global $g_ahTxtTrainArmyTroopCount[$eTroopCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 Global $g_ahLblTrainArmyTroopLevel[$eTroopCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Global $g_ahTxtTrainArmySpellCount[$eSpellCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Global $g_ahLblTrainArmySpellLevel[$eSpellCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-Global $g_hTxtFullTroop = 0, $g_hChkTotalCampForced = 0, $g_hTxtTotalCampForced = 0, $g_hChkForceBrewBeforeAttack = 0, $g_hChkDoubleTrain = 0, $g_hChkMultiClick = 0
+Global $g_hTxtFullTroop = 0, $g_hChkTotalCampForced = 0, $g_hTxtTotalCampForced = 0, $g_hChkForceBrewBeforeAttack = 0, $g_hChkDoubleTrain = 0, $g_hChkMultiClick = 0 , $g_hChkAutoCamp = 0
 
 Global $g_hGrpTrainTroops = 0, $g_hGrpCookSpell = 0
 Global $g_ahPicTrainArmyTroop[$eTroopCount] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -514,6 +514,9 @@ Func CreateTroopsSpellsSubTab()
 			; DoubleTrain - Demen
 		$g_hChkDoubleTrain = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops", "ChkDoubleTrain", "Double Train Army"), $x + 275, $y, -1, 15)
            _GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops", "ChkDoubleTrain01", "Train 2nd set of troops & spells after training 1st combo" & @CRLF & "Make sure to enter correct 'Total Camp', 'Total Spell' and number of troops/spells in your setting"))
+		
+		$g_hChkAutoCamp = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops", "ChkAutoCamp", "Auto update camps"), $x + 120, $y, -1, 15)   
+		 
 	$y += 13
 		; Lightning
 		Local $sSpellName = GetTranslatedFileIni("MBR Global GUI Design Names Spells", "TxtLightningSpells", "Lightning Spell")

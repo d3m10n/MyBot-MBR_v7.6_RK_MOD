@@ -197,7 +197,7 @@ Func CreateBotOptions()
 		$g_hChkUseRandomClick = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkUseRandomClick", "Random Click"), $x, $y, -1, -1)
 			GUICtrlSetOnEvent(-1, "chkUseRandomClick")
 	$y += 19
-	   $g_hChkLabCheck = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkLabCheck", "Disable Lab Check"), $x, $y + 2, -1, -1)
+	   $g_hChkLabCheck = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Bot - Options", "ChkLabCheck", "Disable Laboratory Check"), $x, $y + 2, -1, -1)
 	       GUICtrlSetState(-1, $GUI_UNCHECKED)
 		   GUICtrlSetOnEvent(-1, "ChkLabCheck")
 	GUICtrlCreateGroup("", -99, -99, 1, 1)

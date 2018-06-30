@@ -1136,6 +1136,9 @@ Func _RunFunction($action)
 				If _Sleep($DELAYRUNBOT1) = False Then checkMainScreen(False)
 			EndIf
 		Case "DonateCC,Train"
+		    If $g_iChkAutoCamp = 0 Then
+		    CheckAutoCamp()
+			EndIf
 			If $g_iActiveDonate And $g_bChkDonate Then
 				If $g_bFirstStart Then
 					getArmyTroopCapacity(True, False)

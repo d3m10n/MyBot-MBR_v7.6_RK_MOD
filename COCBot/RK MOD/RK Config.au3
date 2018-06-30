@@ -52,6 +52,8 @@ Func ReadConfig_RKMod()
 	
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
+	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
+
 EndFunc   ;==>ReadConfig_RKMod
 
 Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
@@ -96,7 +98,9 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	;================================================== Move the Request CC Troops - Added By rulesss ==================== ;
 	
 	_Ini_Add("planned", "ReqCCFirst", $g_bReqCCFirst)
-
+    
+	_Ini_Add("troop", "ChkAutoCamp", $g_iChkAutoCamp ? 1 : 0)
+	
 EndFunc   ;==>SaveConfig_RKMod
 
 Func ApplyConfig_RKMod($TypeReadSave)
@@ -143,6 +147,8 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			; =============================================== Move the Request CC Troops - Added by rulesss =================== ;
 			
 			$g_bReqCCFirst = (GUICtrlRead($g_hChkReqCCFirst) = $GUI_CHECKED)
+			
+			$g_iChkAutoCamp = GUICtrlRead($g_hChkAutoCamp) = $GUI_CHECKED ? 1 : 0
 			
 		Case "Read"
 
@@ -198,7 +204,10 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			; ================================================== Move the Request CC Troops - Added by rulesss ================== ;
 			
 			GUICtrlSetState($g_hChkReqCCFirst, $g_bReqCCFirst = True ? $GUI_CHECKED : $GUI_UNCHECKED)
-
+            
+			GUICtrlSetState($g_hChkAutoCamp, $g_iChkAutoCamp = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+   		    chkAutoCamp()
+			
 	EndSwitch
 
 EndFunc   ;==>ApplyConfig_RKMod

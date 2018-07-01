@@ -39,7 +39,7 @@ Func CheckVersion()
 		Else
 			SetLog("WELCOME CHIEF, YOU HAVE THE LATEST MOD VERSION", $COLOR_SUCCESS)
 			SetLog(" ")
-			_PrintLogVersion($g_sLastMessage)
+			_PrintLogVersion($g_sLastModmessage)
 		EndIf
 	EndIf
 EndFunc   ;==>CheckVersion

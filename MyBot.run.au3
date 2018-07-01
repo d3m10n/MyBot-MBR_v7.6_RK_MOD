@@ -1210,6 +1210,9 @@ Func _RunFunction($action)
 		Case "SuperXP"
 			MainSuperXPHandler()
 			_Sleep($DELAYRUNBOT3)
+		Case "Humanization" 
+			BotHumanization()
+			_Sleep($DELAYRUNBOT3)
 		Case "CollectFreeMagicItems"
 			CollectFreeMagicItems()
 		Case ""

@@ -27,6 +27,14 @@
 #include "RK Auto update camps.au3"
 #include "RK Check Stop For War\CheckStopForWar.au3"
 
+; Bot Humanization
+#include "RK Bot Humanization\BotHumanization.au3"
+#include "RK Bot Humanization\AttackNDefenseActions.au3"
+#include "RK Bot Humanization\BestClansNPlayersActions.au3"
+#include "RK Bot Humanization\ChatActions.au3"
+#include "RK Bot Humanization\ClanActions.au3"
+#include "RK Bot Humanization\ClanWarActions.au3"
+
 ;#include "RK DoubleTrain\RK Double Train.au3"
 
 #include "RK Config.au3"

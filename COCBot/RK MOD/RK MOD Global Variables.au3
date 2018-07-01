@@ -85,3 +85,12 @@ Global Const $g_sImgSCIDOr =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgMIS\Or"
 Global $g_bChkAltuFaltuSCID = False        
 
 Global $g_iChkAutoCamp = 0
+
+; ================================================ Stop For War - Added rulesss ======================================== ;
+Global $g_bStopForWar
+Global $g_iStopTime, $g_bStopBeforeBattle, $g_iReturnTime
+Global $g_iStartTimerToRecheck, $g_iTimerToRecheck, $g_sCheckOrStop
+Global $g_bTrainWarTroop, $g_bUseQuickTrainWar, $g_aChkArmyWar[3], $g_aiWarCompTroops[$eTroopCount], $g_aiWarCompSpells[$eSpellCount]
+Global $g_bRequestCCForWar,	$g_sTxtRequestCCForWar
+Global $g_abStopForWar[8]
+Global $g_aiStartTimerToRecheck[8], $g_aiTimerToRecheck[8], $g_asCheckOrStop[8]

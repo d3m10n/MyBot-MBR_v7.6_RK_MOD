@@ -53,6 +53,28 @@ Func ReadConfig_RKMod()
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
 	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
+	
+	;================================================== Stop For War - Added By rulesss ==================== ;
+	
+	IniReadS($g_bStopForWar, $g_sProfileConfigPath, "war preparation", "Enable", False, "Bool")
+	IniReadS($g_iStopTime, $g_sProfileConfigPath, "war preparation", "Stop Time", 0, "Int")
+	IniReadS($g_bStopBeforeBattle, $g_sProfileConfigPath, "war preparation", "Stop Before", True, "Bool")
+	IniReadS($g_iReturnTime, $g_sProfileConfigPath, "war preparation", "Return Time", 0, "Int")
+	IniReadS($g_bTrainWarTroop, $g_sProfileConfigPath, "war preparation", "Train War Troop", False, "Bool")
+	IniReadS($g_bUseQuickTrainWar, $g_sProfileConfigPath, "war preparation", "QuickTrain War Troop", False, "Bool")
+	IniReadS($g_aChkArmyWar[0], $g_sProfileConfigPath, "war preparation", "QuickTrain War Army1", False, "Bool")
+	IniReadS($g_aChkArmyWar[1], $g_sProfileConfigPath, "war preparation", "QuickTrain War Army2", False, "Bool")
+	IniReadS($g_aChkArmyWar[2], $g_sProfileConfigPath, "war preparation", "QuickTrain War Army3", False, "Bool")
+
+	For $i = 0 To $eTroopCount - 1
+		IniReadS($g_aiWarCompTroops[$i], $g_sProfileConfigPath, "war preparation", $g_asTroopShortNames[$i], 0, "Int")
+	Next
+	For $j = 0 To $eSpellCount - 1
+		IniReadS($g_aiWarCompSpells[$j], $g_sProfileConfigPath, "war preparation", $g_asSpellShortNames[$j], 0, "Int")
+	Next
+
+	IniReadS($g_bRequestCCForWar, $g_sProfileConfigPath, "war preparation", "RequestCC War", False, "Bool")
+	$g_sTxtRequestCCForWar = IniRead($g_sProfileConfigPath, "war preparation", "RequestCC War Text", "War troop please")
 
 EndFunc   ;==>ReadConfig_RKMod
 
@@ -100,6 +122,28 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	_Ini_Add("planned", "ReqCCFirst", $g_bReqCCFirst)
     
 	_Ini_Add("troop", "ChkAutoCamp", $g_iChkAutoCamp ? 1 : 0)
+	
+	;================================================== Stop For War - Added By rulesss ==================== ;
+	
+	_Ini_Add("war preparation", "Enable", $g_bStopForWar ? 1 : 0)
+	_Ini_Add("war preparation", "Stop Time", $g_iStopTime)
+	_Ini_Add("war preparation", "Stop Before", $g_bStopBeforeBattle ? 1 : 0)
+	_Ini_Add("war preparation", "Return Time", $g_iReturnTime)
+	_Ini_Add("war preparation", "Train War Troop", $g_bTrainWarTroop ? 1 : 0)
+	_Ini_Add("war preparation", "QuickTrain War Troop", $g_bUseQuickTrainWar ? 1 : 0)
+	_Ini_Add("war preparation", "QuickTrain War Army1", $g_aChkArmyWar[0] ? 1 : 0)
+	_Ini_Add("war preparation", "QuickTrain War Army2", $g_aChkArmyWar[1] ? 1 : 0)
+	_Ini_Add("war preparation", "QuickTrain War Army3", $g_aChkArmyWar[2] ? 1 : 0)
+
+	For $i = 0 To $eTroopCount - 1
+		_Ini_Add("war preparation", $g_asTroopShortNames[$i], $g_aiWarCompTroops[$i])
+	Next
+	For $j = 0 To $eSpellCount - 1
+		_Ini_Add("war preparation", $g_asSpellShortNames[$j], $g_aiWarCompSpells[$j])
+	Next
+
+	_Ini_Add("war preparation", "RequestCC War", $g_bRequestCCForWar ? 1 : 0)
+	_Ini_Add("war preparation", "RequestCC War Text", $g_sTxtRequestCCForWar)
 	
 EndFunc   ;==>SaveConfig_RKMod
 
@@ -149,6 +193,29 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			$g_bReqCCFirst = (GUICtrlRead($g_hChkReqCCFirst) = $GUI_CHECKED)
 			
 			$g_iChkAutoCamp = GUICtrlRead($g_hChkAutoCamp) = $GUI_CHECKED ? 1 : 0
+			
+			;================================================== Stop For War - Added By rulesss ==================== ;
+			
+			$g_bStopForWar = GUICtrlRead($g_hChkStopForWar)  = $GUI_CHECKED
+
+			$g_iStopTime = _GUICtrlComboBox_GetCurSel($g_hCmbStopTime)
+			$g_bStopBeforeBattle = _GUICtrlComboBox_GetCurSel($g_CmbStopBeforeBattle) = 0
+			$g_iReturnTime = _GUICtrlComboBox_GetCurSel($g_hCmbReturnTime)
+
+			$g_bTrainWarTroop = GUICtrlRead($g_hChkTrainWarTroop) = $GUI_CHECKED
+			$g_bUseQuickTrainWar = GUICtrlRead($g_hChkUseQuickTrainWar) = $GUI_CHECKED
+			$g_aChkArmyWar[0] = GUICtrlRead($g_ahChkArmyWar[0]) = $GUI_CHECKED
+			$g_aChkArmyWar[1] = GUICtrlRead($g_ahChkArmyWar[1]) = $GUI_CHECKED
+			$g_aChkArmyWar[2] = GUICtrlRead($g_ahChkArmyWar[2]) = $GUI_CHECKED
+			For $i = 0 To $eTroopCount - 1
+				$g_aiWarCompTroops[$i] = GUICtrlRead($g_ahTxtTrainWarTroopCount[$i])
+			Next
+			For $j = 0 To $eSpellCount - 1
+				$g_aiWarCompSpells[$j] = GUICtrlRead($g_ahTxtTrainWarSpellCount[$j])
+			Next
+
+			$g_bRequestCCForWar = GUICtrlRead($g_hChkRequestCCForWar) = $GUI_CHECKED
+			$g_sTxtRequestCCForWar = GUICtrlRead($g_hTxtRequestCCForWar)
 			
 		Case "Read"
 
@@ -207,6 +274,30 @@ Func ApplyConfig_RKMod($TypeReadSave)
             
 			GUICtrlSetState($g_hChkAutoCamp, $g_iChkAutoCamp = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
    		    chkAutoCamp()
+			
+			;================================================== Stop For War - Added By rulesss ==================== ;
+	
+			GUICtrlSetState($g_hChkStopForWar, $g_bStopForWar ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbStopTime, $g_iStopTime)
+			_GUICtrlComboBox_SetCurSel($g_CmbStopBeforeBattle, $g_bStopBeforeBattle ? 0 : 1)
+			_GUICtrlComboBox_SetCurSel($g_hCmbReturnTime, $g_iReturnTime)
+
+			GUICtrlSetState($g_hChkTrainWarTroop, $g_bTrainWarTroop ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkUseQuickTrainWar, $g_bUseQuickTrainWar ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_ahChkArmyWar[0], $g_aChkArmyWar[0] ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_ahChkArmyWar[1], $g_aChkArmyWar[1] ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_ahChkArmyWar[2], $g_aChkArmyWar[2] ? $GUI_CHECKED : $GUI_UNCHECKED)
+
+			For $i = 0 To $eTroopCount - 1
+				GUICtrlSetData($g_ahTxtTrainWarTroopCount[$i], $g_aiWarCompTroops[$i])
+			Next
+			For $j = 0 To $eSpellCount - 1
+				GUICtrlSetData($g_ahTxtTrainWarSpellCount[$j], $g_aiWarCompSpells[$j])
+			Next
+			GUICtrlSetState($g_hChkRequestCCForWar, $g_bRequestCCForWar ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($g_hTxtRequestCCForWar, $g_sTxtRequestCCForWar)
+			ReadConfig_600_52_2()
+			ChkStopForWar()
 			
 	EndSwitch
 

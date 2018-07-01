@@ -25,6 +25,7 @@
 #include "RK AF_SCID\AF_Various ImgSearch.au3"
 
 #include "RK Auto update camps.au3"
+#include "RK Check Stop For War\CheckStopForWar.au3"
 
 ;#include "RK DoubleTrain\RK Double Train.au3"
 

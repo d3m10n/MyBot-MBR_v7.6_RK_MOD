@@ -54,6 +54,8 @@ Func ReadConfig_RKMod()
 	
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
+	; ================================================ AutoCamp - Added rulesss ======================================== 
+	
 	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
 	
 	;================================================== Stop For War - Added By rulesss ==================== ;

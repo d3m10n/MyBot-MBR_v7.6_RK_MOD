@@ -13,7 +13,9 @@
 ; Example .......: ---
 ; ===============================================================================================================================
 
-
+Global $g_sLastModversion = "" ;latest version from GIT
+Global $g_sLastModmessage = "" ;message for last version
+Global $g_sOldModversmessage = "" ;warning message for old bot
 
 ; ================================================== CSV SPEED PART - Added by rulesss =========================================== ;
 
@@ -83,6 +85,8 @@ Global Const $g_sImgSCIDAccs =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgAccs"
 Global Const $g_sImgSCIDOr =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgMIS\Or"
 
 Global $g_bChkAltuFaltuSCID = False        
+
+; ================================================ AutoCamp - Added rulesss ======================================== ;
 
 Global $g_iChkAutoCamp = 0
 

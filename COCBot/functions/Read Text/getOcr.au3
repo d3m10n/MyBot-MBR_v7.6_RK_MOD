@@ -270,38 +270,9 @@ Func getBarracksNewTroopQuantity($x_start, $y_start, $bNeedCapture = True) ;  ->
 	Return getOcrAndCapture("coc-newarmy", $x_start, $y_start, 45, 18, True, False, $bNeedCapture)
 EndFunc   ;==>getBarracksNewTroopQuantity
 
-Func _getArmyCapacityOnTrainTroops($x_start, $y_start) ;  -> Gets quantity of troops in army Window
-
-Local $aResult[3] = [0, 0, 0]
-	$aResult[0] = getOcrAndCapture("coc-NewCapacity", $x_start, $y_start, 67, 14, True)
-	Local $dbg = 0
-		Local $aTempResult = StringSplit($aResult[0], "#", $STR_NOCOUNT)
-		$aResult[1] = Number($aTempResult[0]) 
-		$aResult[2] = Number($aTempResult[1])
-		$aResult[2] = $aResult[2] / 2
-		; Spell
-		If $aResult[2] <= 11 Then
-		GUICtrlSetData($g_hTxtTotalCountSpell, $aResult[2])
-		$g_iTotalSpellValue = $aResult[2]
-		; Army
-		ElseIf $aResult[2] >= 15 Then
-		GUICtrlSetData($g_hTxtTotalCampForced, $aResult[2])
-		$g_iTotalCampForcedValue = $aResult[2]
-		
-	If $dbg = 1 Then Setlog($aResult[0])
-	If $dbg = 1 Then Setlog($g_iTotalSpellValue)
-	If $dbg = 1 Then Setlog($g_iTotalCampForcedValue)
-
-	EndIf
-	
-	Return $aResult[0]
-EndFunc   ;==>_getArmyCapacityOnTrainTroops
-
 Func getArmyCapacityOnTrainTroops($x_start, $y_start)
-Local $g_campSpaceAuto = 1
-	if $g_campSpaceAuto = 1 Then
-		Local $NewCampOCR = _getArmyCapacityOnTrainTroops($x_start, $y_start)
-			Return $NewCampOCR
+	if $g_iChkAutoCamp = 1 Then
+		Return _getArmyCapacityOnTrainTroops($x_start, $y_start)
 	Else
 			Return getOcrAndCapture("coc-NewCapacity", $x_start, $y_start, 67, 14, True)
 	Endif

@@ -18,6 +18,11 @@
 Func getArmyHeroTime($iHeroType, $bOpenArmyWindow = False, $bCloseArmyWindow = False)
 
 	If $g_bDebugSetlogTrain Or $g_bDebugSetlog Then SetLog("Begin getArmyHeroTime:", $COLOR_DEBUG)
+    
+	; Grab Healed Heroes - RK MOD
+	$g_asHeroHealTime[0] = ""
+	$g_asHeroHealTime[1] = ""
+	$g_asHeroHealTime[2] = ""
 
 	; validate hero troop type input, must be hero enum value or "all"
 	If $iHeroType <> $eHeroKing And $iHeroType <> $eHeroQueen And $iHeroType <> $eHeroWarden And StringInStr($iHeroType, "all", $STR_NOCASESENSEBASIC) = 0 Then
@@ -104,6 +109,11 @@ Func getArmyHeroTime($iHeroType, $bOpenArmyWindow = False, $bCloseArmyWindow = F
 	If $iHeroType = $eHeroKing Or $iHeroType = $eHeroQueen Or $iHeroType = $eHeroWarden Then
 		Return $iRemainTrainHeroTimer ; return one requested hero value
 	ElseIf StringInStr($iHeroType, "all", $STR_NOCASESENSEBASIC) > 0 Then
+	    ; Grab Healed Heroes - RK MOD
+		For $i = 0 To 2
+			If $aResultHeroes[$i] <> "" and $aResultHeroes[$i] > 0 Then $g_asHeroHealTime[$i] = _DateAdd("s", $aResultHeroes[$i] * 60, _NowCalc())
+			SetDebugLog($aHeroRemainData[$i][2] & " heal time: " & $g_asHeroHealTime[$i])
+		Next
 		; calling function needs to check if heroattack enabled & herowait enabled for attack mode used!
 		Return $aResultHeroes ; return array of with each hero regen time value
 	EndIf

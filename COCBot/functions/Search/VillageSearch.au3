@@ -34,6 +34,14 @@ Func _VillageSearch() ;Control for searching a village that meets conditions
 	Local $logwrited = False
 	Local $iSkipped = 0
 
+	; Grab Healed Heroes - RK MOD
+	Local $bReturnToGrabHero = False
+	Local $abHeroUse[3] = [False, False, False]
+	For $i = 0 to 2
+		$abHeroUse[$i] = ($g_abSearchSearchesEnable[$DB] ? IsSpecialTroopToBeUsed($DB, $eKing + $i) : False) _
+							Or ($g_abSearchSearchesEnable[$LB] ? IsSpecialTroopToBeUsed($LB, $eKing + $i) : False)
+	Next
+
 	If $g_bDebugDeadBaseImage Or $g_aiSearchEnableDebugDeadBaseImage > 0 Then
 		DirCreate($g_sProfileTempDebugPath & "\SkippedZombies\")
 		DirCreate($g_sProfileTempDebugPath & "\Zombies\")
@@ -304,8 +312,22 @@ Func _VillageSearch() ;Control for searching a village that meets conditions
 			SetLog($GetResourcesTXT, $COLOR_BLACK, "Lucida Console", 7.5)
 		EndIf
 
+		; Grab Healed Heroes - RK MOD
+		If $g_bRestartSearchGrabHero Then
+			For $i = 0 To 2 ; check all 3 hero
+				If Not $abHeroUse[$i] Or Not _DateIsValid($g_asHeroHealTime[$i]) Then ContinueLoop
+				Local $iTimeTillHeroHealed = Int(_DateDiff('s', _NowCalc(), $g_asHeroHealTime[$i])) ; hero time in seconds
+				SetDebugLog($g_asHeroNames[$i] & " will be ready in " & $iTimeTillHeroHealed & " seconds")
+				If $iTimeTillHeroHealed <= 0 Then
+					$bReturnToGrabHero = True
+					$g_asHeroHealTime[$i] = ""
+					SetLog($g_asHeroNames[$i] & " is ready. Return home to grab " & ($i <> 1 ? "him" : "her") & " to join the attack")
+					ExitLoop ; found 1 Hero is ready, skip checking other heros
+				EndIf
+			Next
+		EndIf
 		; Return Home on Search limit
-		If SearchLimit($iSkipped + 1) Then Return True
+		If SearchLimit($iSkipped + 1, $bReturnToGrabHero) Then Return True
 
 		If CheckAndroidReboot() = True Then
 			$g_bRestart = True
@@ -439,8 +461,8 @@ Func _VillageSearch() ;Control for searching a village that meets conditions
 
 EndFunc   ;==>_VillageSearch
 
-Func SearchLimit($iSkipped)
-	If $g_bSearchRestartEnable And $iSkipped >= Number($g_iSearchRestartLimit) Then
+Func SearchLimit($iSkipped, $bReturnToGrabHero = False) ; Add Grab Healed Heroes - RK MOD
+	If $bReturnToGrabHero Or ($g_bSearchRestartEnable And $iSkipped >= Number($g_iSearchRestartLimit)) Then ; Add Grab Healed Heroes - RK MOD
 		Local $Wcount = 0
 		While _CheckPixel($aSurrenderButton, $g_bCapturePixel) = False
 			If _Sleep($DELAYSEARCHLIMIT) Then Return

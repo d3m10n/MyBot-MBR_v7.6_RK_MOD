@@ -4,8 +4,8 @@
 ; Syntax ........: ---
 ; Parameters ....: ---
 ; Return values .: ---
-; Author ........: RoroTiti
-; Modified ......: 08/05/2017
+; Author ........: by RK MOD
+; Modified ......: 
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2017
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......: ---
@@ -16,12 +16,12 @@
 Func ReadConfig_RKMod()
 
 
-	; ================================================== CSV SPEED PART Added By rulesss ================================================== ;
+	; ================================================== CSV SPEED PART - Added by RK MOD ================================================== ;
 
 	IniReadS($icmbCSVSpeed[$LB], $g_sProfileConfigPath, "RK CSV Speed", "cmbCSVSpeed[LB]", $icmbCSVSpeed[$LB], "Int")
 	IniReadS($icmbCSVSpeed[$DB], $g_sProfileConfigPath, "RK CSV Speed", "cmbCSVSpeed[DB]", $icmbCSVSpeed[$DB], "Int")
 
-	; ================================================== Super XP PART Added By rulesss ================================================== ;
+	; ================================================== Super XP PART - Added by RK MOD  ================================================== ;
 
 	IniReadS($ichkEnableSuperXP, $g_sProfileConfigPath, "RK GoblinXP", "EnableSuperXP", 0, "int")
 	IniReadS($irbSXTraining, $g_sProfileConfigPath, "RK GoblinXP", "SXTraining", 1, "int")
@@ -30,7 +30,7 @@ Func ReadConfig_RKMod()
 	IniReadS($ichkSXAQ, $g_sProfileConfigPath, "RK GoblinXP", "SXAQ", $eHeroNone)
 	IniReadS($ichkSXGW, $g_sProfileConfigPath, "RK GoblinXP", "SXGW", $eHeroNone)
     
-	; ================================================== Forecast PART Added By rulesss ================================================== ;
+	; ================================================== Forecast PART - Added by RK MOD  ================================================== ;
 	
 	IniReadS($iChkForecastBoost, $g_sProfileConfigPath, "RK Forecast", "chkForecastBoost", 0, "Int")
 	IniReadS($iChkForecastPause, $g_sProfileConfigPath, "RK Forecast", "chkForecastPause", 0, "Int")
@@ -44,21 +44,21 @@ Func ReadConfig_RKMod()
 	IniReadS($itxtForecastHopingSwitchMin, $g_sProfileConfigPath, "RK Forecast", "txtForecastHopingSwitchMin", 2, "Int")
 	IniReadS($icmbSwLang, $g_sProfileConfigPath, "RK Forecast", "cmbSwLang", 1, "int")
 	
-	;==================================================; Skip Request CC - Demen Added By rulesss ==================== ;
+	;==================================================; Skip Request CC - Added by RK MOD  ==================== ;
 	
 	$g_bSkipRequestCC = (IniRead($g_sProfileConfigPath, "donate", "SkipRequestCC", "0") = "1")
 	$g_iSkipRequestCCTroop = Int(IniRead($g_sProfileConfigPath, "donate", "SkipRequestCC_Troop", "0"))
 	$g_iSkipRequestCCSpell = Int(IniRead($g_sProfileConfigPath, "donate", "SkipRequestCC_Spell", "0"))
 	
-	;================================================== Move the Request CC Troops - Added By rulesss ==================== ;
+	;================================================== Move the Request CC Troops - Added by RK MOD  ==================== ;
 	
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
-	; ================================================ AutoCamp - Added rulesss ======================================== 
+	; ================================================ AutoCamp - Added by RK MOD ======================================== 
 	
 	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
 	
-	;================================================== Stop For War - Added By rulesss ==================== ;
+	;================================================== Stop For War - Added by RK MOD  ==================== ;
 	
 	IniReadS($g_bStopForWar, $g_sProfileConfigPath, "war preparation", "Enable", False, "Bool")
 	IniReadS($g_iStopTime, $g_sProfileConfigPath, "war preparation", "Stop Time", 0, "Int")
@@ -80,7 +80,7 @@ Func ReadConfig_RKMod()
 	IniReadS($g_bRequestCCForWar, $g_sProfileConfigPath, "war preparation", "RequestCC War", False, "Bool")
 	$g_sTxtRequestCCForWar = IniRead($g_sProfileConfigPath, "war preparation", "RequestCC War Text", "War troop please")
 	
-	;================================================== Bot Humanization - Added By rulesss ==================== ;
+	;================================================== Bot Humanization - Added by RK MOD  ==================== ;
 	
 	IniReadS($g_ichkUseBotHumanization, $g_sProfileConfigPath, "Bot Humanization", "chkUseBotHumanization", $g_ichkUseBotHumanization, "int")
 	IniReadS($g_ichkUseAltRClick, $g_sProfileConfigPath, "Bot Humanization", "chkUseAltRClick", $g_ichkUseAltRClick, "int")
@@ -100,5 +100,9 @@ Func ReadConfig_RKMod()
 	Next
 	IniReadS($g_icmbMaxActionsNumber, $g_sProfileConfigPath, "Bot Humanization", "cmbMaxActionsNumber", $g_icmbMaxActionsNumber, "int")
 	IniReadS($g_ichallengeMessage, $g_sProfileConfigPath, "Bot Humanization", "challengeMessage", $g_ichallengeMessage)
+	
+	;================================================== Grab Healed Heroes - Added by RK MOD  ==================== ;
+		
+	IniReadS($g_bRestartSearchGrabHero, $g_sProfileConfigPath, "search", "GrabHealHero", False, "Bool")
 	
 EndFunc   ;==>ReadConfig_RKMod

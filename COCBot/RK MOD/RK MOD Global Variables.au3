@@ -4,8 +4,8 @@
 ; Syntax ........: ---
 ; Parameters ....: ---
 ; Return values .: ---
-; Author ........: RoroTiti
-; Modified ......: 08/05/2017
+; Author ........: by RK MOD
+; Modified ......: 
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2017
 ;                  MyBot is distributed under the terms of the GNU GPL
 ; Related .......: ---
@@ -17,13 +17,13 @@ Global $g_sLastModversion = "" ;latest version from GIT
 Global $g_sLastModmessage = "" ;message for last version
 Global $g_sOldModversmessage = "" ;warning message for old bot
 
-; ================================================== CSV SPEED PART - Added by rulesss =========================================== ;
+; ================================================== CSV SPEED PART - Added by RK MOD =========================================== ;
 
 Global $cmbCSVSpeed[2] = [$LB, $DB]
 Global $icmbCSVSpeed[2] = [2, 2]
 Global $g_CSVSpeedDivider = 1
 
-; ================================================== Goblin XP PART - Added by rulesss =========================================== ;
+; ================================================== Goblin XP PART - Added by RK MOD =========================================== ;
 
 ;SuperXP / GoblinXP
 Global $ichkEnableSuperXP = 0, $irbSXTraining = 1, $ichkSXBK = 0, $ichkSXAQ = 0, $ichkSXGW = 0, $iStartXP = 0, $iCurrentXP = 0, $iGainedXP = 0, $iGainedXPHour = 0, $itxtMaxXPtoGain = 500
@@ -59,15 +59,15 @@ Global $ichkForecastHopingSwitchMax = 0, $icmbForecastHopingSwitchMax = 0 , $itx
 Global $icmbSwLang = 0
 Global $cmbSwLang = 0
 
-; ================================================ Skip Request CC - Added rulesss =================================================== ;
+; ================================================ Skip Request CC - Added by RK MOD =================================================== ;
 
 Global $g_bSkipRequestCC, $g_iSkipRequestCCTroop, $g_iSkipRequestCCSpell 
 
-; ================================================ move the Request CC Troops - Added rulesss ======================================== ;
+; ================================================ move the Request CC Troops - Added by RK MOD ======================================== ;
 
 Global $g_bReqCCFirst = False
 
-; ================================================ AF_SCID - Added rulesss ======================================== ;
+; ================================================ AF_SCID - Added by RK MOD ======================================== ;
 
 ;Glabal Variables for Debugging
 Global $g_DebugLogAF = 0
@@ -86,11 +86,11 @@ Global Const $g_sImgSCIDOr =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgMIS\Or"
 
 Global $g_bChkAltuFaltuSCID = False        
 
-; ================================================ AutoCamp - Added rulesss ======================================== ;
+; ================================================ AutoCamp - Added by RK MOD ======================================== ;
 
 Global $g_iChkAutoCamp = 0
 
-; ================================================ Stop For War - Added rulesss ======================================== ;
+; ================================================ Stop For War - Added by RK MOD ======================================== ;
 Global $g_bStopForWar
 Global $g_iStopTime, $g_bStopBeforeBattle, $g_iReturnTime
 Global $g_iStartTimerToRecheck, $g_iTimerToRecheck, $g_sCheckOrStop
@@ -99,7 +99,7 @@ Global $g_bRequestCCForWar,	$g_sTxtRequestCCForWar
 Global $g_abStopForWar[8]
 Global $g_aiStartTimerToRecheck[8], $g_aiTimerToRecheck[8], $g_asCheckOrStop[8]
 
-; ================================================ Bot Humanization - Added rulesss ======================================== ;
+; ================================================ Bot Humanization - Added by RK MOD ======================================== ;
 
 Global $g_iacmbPriority[13] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Global $g_iacmbMaxSpeed[2] = [1, 1]
@@ -118,3 +118,8 @@ Global $g_aReplayDuration[2] = [0, 0] ; An array, [0] = Minute | [1] = Seconds
 Global $g_bOnReplayWindow, $g_iReplayToPause
 
 Global $g_iLastLayout = 0
+
+; ================================================ Grab Healed Heroes - Added by RK MOD ======================================== ;
+
+Global $g_bRestartSearchGrabHero
+Global $g_asHeroHealTime[3] = ["", "", ""] 

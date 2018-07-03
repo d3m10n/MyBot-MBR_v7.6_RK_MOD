@@ -20,6 +20,7 @@ Global $g_hSldVSDelay = 0, $g_hSldMaxVSDelay = 0
 Global $g_hChkAttackNow = 0, $g_hCmbAttackNowDelay = 0, $g_hChkRestartSearchLimit = 0, $g_hTxtRestartSearchlimit = 0, $g_hChkAlertSearch = 0
 
 Global $g_hLblVSDelay = 0, $g_hLblTextVSDelay = 0, $g_hLblMaxVSDelay = 0, $g_hLblTextMaxVSDelay = 0, $g_hLblAttackNow = 0, $g_hLblAttackNowSec = 0
+Global $g_hChkRestartSearchGrabHero = 0 ; GrabHealedHeroes - RK MOD
 
 Func CreateAttackSearchOptionsSearch()
 
@@ -173,6 +174,11 @@ Func CreateAttackSearchOptionsSearch()
 		$g_hChkAlertSearch = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Options-Search", "ChkAlertSearch", "Alert me when Village found"), $x - 5, $y, -1, -1)
 			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Options-Search", "ChkAlertSearch_Info_01", "Check this if you want an Audio alarm & a Balloon Tip when a Base to attack is found."))
 			GUICtrlSetState(-1, $GUI_CHECKED)
+			
+	 ; Grab Healed Heroes - RK MOD
+		$g_hChkRestartSearchGrabHero = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Options-Search", "ChkRestartSearchGrabHero_01", "Return home to grab healed hero"), $x - 5, $y + 25, -1, -1)
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Options-Search", "ChkRestartSearchGrabHero_02", "Return to base when a hero is healed and ready to join the attack"))
+            GUICtrlSetState(-1, $GUI_UNCHECKED)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 EndFunc   ;==>CreateAttackSearchOptionsSearch

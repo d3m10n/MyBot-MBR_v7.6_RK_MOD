@@ -135,6 +135,24 @@ Func ReadConfig_RKMod()
 	IniReadS($icmbTrophyMinProfile, $g_sProfileConfigPath, "profiles", "cmbTrophyMinProfile", 0, "int")
 	IniReadS($itxtMinTrophyAmount, $g_sProfileConfigPath, "profiles", "txtMinTrophyAmount", 1000, "int")
 	
+	; ================================================== ChatBOT - Added by RK MOD ================================= ;
+	
+	IniReadS($ChatbotChatGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalChat", $ChatbotChatGlobal, "Int")
+	IniReadS($ChatbotScrambleGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal, "Int")
+	IniReadS($iTxtGlobChatTimeDalay, $g_sProfileConfigPath, "Chatbot", "TxtGlobChatTimeDalay", 0 ,"Int")
+	IniReadS($ChatbotSwitchLang, $g_sProfileConfigPath, "Chatbot", "chkSwitchLang", $ChatbotSwitchLang, "Int")
+	IniReadS($icmbLang, $g_sProfileConfigPath, "Chatbot", "cmbLang", 8, "int")
+	IniReadS($ChatbotChatClan, $g_sProfileConfigPath, "Chatbot", "chkClanChat", $ChatbotChatClan, "Int")
+	IniReadS($ChatbotClanUseResponses, $g_sProfileConfigPath, "Chatbot", "chkUseResponses", $ChatbotClanUseResponses, "Int")
+	IniReadS($ChatbotClanAlwaysMsg, $g_sProfileConfigPath, "Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg, "Int")
+	IniReadS($ChatbotUseNotify, $g_sProfileConfigPath, "Chatbot", "chkChatNotify", $ChatbotUseNotify, "Int")
+	IniReadS($ChatbotPbSendNew, $g_sProfileConfigPath, "Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew, "Int")	
+	;IniReadS($editGlobalMessages1, $g_sProfileConfigPath, "Pico Chatbot", "chkPbSendNewChats", $editGlobalMessages1, "Int")
+	$editGlobalMessages1 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications")
+	$editGlobalMessages2 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg2", "Join now|Apply now")
+	$editGlobalMessages3 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars")
+	$editGlobalMessages4 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg4", "Adults Only| 18+")
+	
 EndFunc   ;==>ReadConfig_RKMod
 
 Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
@@ -261,6 +279,26 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	_Ini_Add("profiles", "chkTrophySwitchMin", $ichkTrophySwitchMin ? 1 : 0)
 	_Ini_Add("profiles", "cmbTrophyMinProfile", $icmbTrophyMinProfile)
 	_Ini_Add("profiles", "txtMinTrophyAmount", $itxtMinTrophyAmount)
+	
+	; ================================================== ChatBOT - Added by RK MOD ================================= ;
+	
+	_Ini_Add("Chatbot", "chkGlobalChat", $ChatbotChatGlobal)
+	_Ini_Add("Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal)
+	_Ini_Add("Chatbot", "TxtGlobChatTimeDalay", GUICtrlRead($TxtGlobChatTimeDalay))
+    _Ini_Add("Chatbot", "chkSwitchLang", $ChatbotSwitchLang)
+	_Ini_Add("Chatbot", "cmbLang", _GUICtrlComboBox_GetCurSel($cmbLang))
+	_Ini_Add("Chatbot", "chkClanChat", $ChatbotChatClan)
+	_Ini_Add("Chatbot", "chkUseResponses", $ChatbotClanUseResponses)
+	_Ini_Add("Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg)
+	_Ini_Add("Chatbot", "chkChatNotify", $ChatbotUseNotify)
+	_Ini_Add("Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew)   
+   
+    _Ini_Add("Chatbot", "globalMsg1", $glb1)
+	_Ini_Add("Chatbot", "globalMsg2", $glb2)
+    _Ini_Add("Chatbot", "globalMsg3", $glb3)
+	_Ini_Add("Chatbot", "globalMsg4", $glb4)
+	_Ini_Add("Chatbot", "genericMsgClan", $cGeneric)
+	_Ini_Add("Chatbot", "responseMsgClan", $cResp)	
 	
 EndFunc   ;==>SaveConfig_RKMod
 
@@ -391,6 +429,19 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			$ichkTrophySwitchMin = GUICtrlRead($g_hChkTrophySwitchMin) = $GUI_CHECKED ? 1 : 0
 			$icmbTrophyMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbTrophyMinProfile)
 			$itxtMinTrophyAmount = GUICtrlRead($g_hTxtMinTrophyAmount)
+			
+			; ================================================== ChatBOT - Added by RK MOD ================================= ;
+			
+			$ChatbotChatGlobal = GUICtrlRead($chkGlobalChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotScrambleGlobal = GUICtrlRead($chkGlobalScramble) = $GUI_CHECKED ? 1 : 0
+			$iTxtGlobChatTimeDalay = GUICtrlRead($TxtGlobChatTimeDalay)
+			$ChatbotSwitchLang = GUICtrlRead($chkSwitchLang) = $GUI_CHECKED ? 1 : 0
+			$icmbLang = _GUICtrlComboBox_GetCurSel($cmbLang)
+			$ChatbotChatClan = GUICtrlRead($chkClanChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanUseResponses = GUICtrlRead($chkUseResponses) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanAlwaysMsg = GUICtrlRead($chkUseGeneric) = $GUI_CHECKED ? 1 : 0
+			$ChatbotUseNotify = GUICtrlRead($chkChatNotify) = $GUI_CHECKED ? 1 : 0
+			$ChatbotPbSendNew = GUICtrlRead($chkPbSendNewChats) = $GUI_CHECKED ? 1 : 0	
 			
 		Case "Read"
 
@@ -533,6 +584,27 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			GUICtrlSetState($g_hChkTrophySwitchMin, $ichkTrophySwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
 			_GUICtrlComboBox_SetCurSel($g_hCmbTrophyMinProfile, $icmbTrophyMinProfile)
 			GUICtrlSetData($g_hTxtMinTrophyAmount, $itxtMinTrophyAmount)
+			
+			; ================================================== ChatBOT - Added by RK MOD ======================================== ;
+			
+			GUICtrlSetState($chkGlobalChat, $ChatbotChatGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkGlobalScramble, $ChatbotScrambleGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($TxtGlobChatTimeDalay, $iTxtGlobChatTimeDalay)
+			GUICtrlSetState($chkSwitchLang, $ChatbotSwitchLang = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)			
+			_GUICtrlComboBox_SetCurSel($cmbLang, $icmbLang)
+			GUICtrlSetState($chkClanChat, $ChatbotChatClan = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkUseResponses, $ChatbotClanUseResponses = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkUseGeneric, $ChatbotClanAlwaysMsg = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkChatNotify, $ChatbotUseNotify = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($chkPbSendNewChats, $ChatbotPbSendNew = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkGlobalChat()
+			chkGlobalScramble()
+			chkSwitchLang()
+			chkClanChat()
+			chkUseResponses()
+			chkUseGeneric()
+			chkChatNotify()
+			chkPbSendNewChats()		
 			
 	EndSwitch
 

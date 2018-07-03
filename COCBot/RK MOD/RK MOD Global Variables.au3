@@ -131,3 +131,31 @@ Global $ichkGoldSwitchMax, $itxtMaxGoldAmount, $icmbGoldMaxProfile, $ichkGoldSwi
 Global $ichkElixirSwitchMax, $itxtMaxElixirAmount, $icmbElixirMaxProfile, $ichkElixirSwitchMin, $itxtMinElixirAmount, $icmbElixirMinProfile
 Global $ichkDESwitchMax, $itxtMaxDEAmount, $icmbDEMaxProfile, $ichkDESwitchMin, $itxtMinDEAmount, $icmbDEMinProfile
 Global $ichkTrophySwitchMax, $itxtMaxTrophyAmount, $icmbTrophyMaxProfile, $ichkTrophySwitchMin, $itxtMinTrophyAmount, $icmbTrophyMinProfile
+
+; ================================================ Chatbot - Added by RK MOD ======================================== ;
+Global $ChatbotChatGlobal = 0
+Global $ChatbotScrambleGlobal = 0
+Global $ChatbotSwitchLang = 0
+Global $ChatbotChatClan = 0
+Global $ChatbotClanUseResponses = 0
+Global $ChatbotClanAlwaysMsg = 0
+Global $ChatbotUseNotify = 0
+Global $ChatbotPbSendNew = 0
+Global $ClanMessages = ""
+Global $ClanResponses = ""
+Global $ClanResponses0
+Global $GlobalMessages1 = ""
+Global $GlobalMessages2 = ""
+Global $GlobalMessages3 = ""
+Global $GlobalMessages4 = ""
+Global $glb1 
+Global $glb2
+Global $glb3
+Global $glb4
+Global $cResp
+Global $cGeneric
+Global $ChatbotStartTime
+Global $message = ""
+Global $globChatTimeDalay 
+Global $iTxtGlobChatTimeDalay = 0
+Global $startGlobChatTimer = TimerInit()

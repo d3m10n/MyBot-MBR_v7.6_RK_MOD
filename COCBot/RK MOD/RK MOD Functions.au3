@@ -27,7 +27,7 @@
 #include "RK Auto update camps.au3" ; (#ID135-)
 #include "RK Check Stop For War\CheckStopForWar.au3"
 
-
+#include "RK Chatbot\Chatbot.au3"
 #include "RK Switch Profiles.au3"
 
 ; Bot Humanization

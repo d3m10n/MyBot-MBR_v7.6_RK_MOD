@@ -135,4 +135,22 @@ Func ReadConfig_RKMod()
 	IniReadS($icmbTrophyMinProfile, $g_sProfileConfigPath, "profiles", "cmbTrophyMinProfile", 0, "int")
 	IniReadS($itxtMinTrophyAmount, $g_sProfileConfigPath, "profiles", "txtMinTrophyAmount", 1000, "int")
 	
+	; ================================================== Chat - Added by RK MOD ================================= ;
+	
+	IniReadS($ChatbotChatGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalChat", $ChatbotChatGlobal, "Int")
+	IniReadS($ChatbotScrambleGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal, "Int")
+	IniReadS($iTxtGlobChatTimeDalay, $g_sProfileConfigPath, "Chatbot", "TxtGlobChatTimeDalay", 0 ,"Int")
+	IniReadS($ChatbotSwitchLang, $g_sProfileConfigPath, "Chatbot", "chkSwitchLang", $ChatbotSwitchLang, "Int")
+	IniReadS($icmbLang, $g_sProfileConfigPath, "Chatbot", "cmbLang", 8, "int")
+	IniReadS($ChatbotChatClan, $g_sProfileConfigPath, "Chatbot", "chkClanChat", $ChatbotChatClan, "Int")
+	IniReadS($ChatbotClanUseResponses, $g_sProfileConfigPath, "Chatbot", "chkUseResponses", $ChatbotClanUseResponses, "Int")
+	IniReadS($ChatbotClanAlwaysMsg, $g_sProfileConfigPath, "Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg, "Int")
+	IniReadS($ChatbotUseNotify, $g_sProfileConfigPath, "Chatbot", "chkChatNotify", $ChatbotUseNotify, "Int")
+	IniReadS($ChatbotPbSendNew, $g_sProfileConfigPath, "Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew, "Int")	
+	;IniReadS($editGlobalMessages1, $g_sProfileConfigPath, "Pico Chatbot", "chkPbSendNewChats", $editGlobalMessages1, "Int")
+	$editGlobalMessages1 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications")
+	$editGlobalMessages2 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg2", "Join now|Apply now")
+	$editGlobalMessages3 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars")
+	$editGlobalMessages4 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg4", "Adults Only| 18+")
+	
 EndFunc   ;==>ReadConfig_RKMod

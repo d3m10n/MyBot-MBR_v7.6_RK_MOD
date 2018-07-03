@@ -269,7 +269,11 @@ EndFunc   ;==>getCloudFailShort
 Func getBarracksNewTroopQuantity($x_start, $y_start, $bNeedCapture = True) ;  -> Gets quantity of troops in army Window
 	Return getOcrAndCapture("coc-newarmy", $x_start, $y_start, 45, 18, True, False, $bNeedCapture)
 EndFunc   ;==>getBarracksNewTroopQuantity
-
+; ================== RK MOD (#ID135-) ===========================================
+;Func getArmyCapacityOnTrainTroops($x_start, $y_start)
+;			Return getOcrAndCapture("coc-NewCapacity", $x_start, $y_start, 67, 14, True)
+;EndFunc   ;==>getArmyCapacityOnTrainTroops
+; ------------------------------
 Func getArmyCapacityOnTrainTroops($x_start, $y_start)
 	if $g_iChkAutoCamp = 1 Then
 		Return _getArmyCapacityOnTrainTroops($x_start, $y_start)
@@ -277,7 +281,7 @@ Func getArmyCapacityOnTrainTroops($x_start, $y_start)
 			Return getOcrAndCapture("coc-NewCapacity", $x_start, $y_start, 67, 14, True)
 	Endif
 EndFunc   ;==>getArmyCapacityOnTrainTroops
-
+; =================== RK MOD (#ID135-) ==========================================
 Func getQueueTroopsQuantity($x_start, $y_start) ;  -> Gets quantity of troops in Queue in Train Tab
 	Return StringReplace(getOcrAndCapture("coc-qqtroop", $x_start, $y_start, 71, 22, True), "b", "")
 EndFunc   ;==>getQueueTroopsQuantity

@@ -1,7 +1,7 @@
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: OCRbypass / RK Auto Update camps v.0.3
+; Name ..........: OCRbypass / RK Auto Update camps v.0.4 (#ID135-)
 ; Description ...: ByPass camps. capacity auto update
-; Author ........: Boludoz (25/6/2018) rulesss (1/7/2018)
+; Author ........: Boludoz (25/6/2018) Rulesss (1/7/2018)
 ; Modified ......: Boludoz (1/7/2018)
 ; Remarks .......: This file is part of MyBot, previously known as ClashGameBot. Copyright 2015-2018
 ;                  MyBot is distributed under the terms of the GNU GPL
@@ -71,9 +71,9 @@ EndFunc   ;==>CheckAutoCamp
 ; ============
 
 Func chkAutoCamp()
-	If GUICtrlRead($g_hChkAutoCamp) = $GUI_CHECKED Then
-	$g_iChkAutoCamp = 1
-	Else
-	$g_iChkAutoCamp = 0
-	EndIf
-EndFunc ;==>chkAutoCamp
+    If GUICtrlRead($g_hChkAutoCamp) = $GUI_CHECKED Then
+    $g_iChkAutoCamp = 1
+    Else
+    $g_iChkAutoCamp = 0
+    EndIf
+EndFunc ;==>chkLabCheck

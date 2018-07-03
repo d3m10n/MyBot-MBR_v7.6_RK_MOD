@@ -77,7 +77,13 @@ Func CreateBotProfiles()
 			$bIconPull = _GUIImageList_Create(24, 24, 4)
 			_GUIImageList_AddBitmap($bIconPull, @ScriptDir & "\images\Button\iconPull.bmp")
 		EndIf
-
+        Local $bIconRecycle = _GUIImageList_Create(24, 24, 4)
+			_GUIImageList_AddBitmap($bIconRecycle, @ScriptDir & "\images\Button\iconRecycle.bmp")
+			_GUIImageList_AddBitmap($bIconRecycle, @ScriptDir & "\images\Button\iconRecycle_2.bmp")
+			_GUIImageList_AddBitmap($bIconRecycle, @ScriptDir & "\images\Button\iconRecycle_2.bmp")
+			_GUIImageList_AddBitmap($bIconRecycle, @ScriptDir & "\images\Button\iconRecycle_4.bmp")
+			_GUIImageList_AddBitmap($bIconRecycle, @ScriptDir & "\images\Button\iconRecycle.bmp")
+		
 		$g_hBtnAddProfile = GUICtrlCreateButton("", $x + 135, $y, 24, 24)
 			_GUICtrlButton_SetImageList($g_hBtnAddProfile, $bIconAdd, 4)
 			GUICtrlSetOnEvent(-1, "btnAddConfirm")
@@ -115,6 +121,16 @@ Func CreateBotProfiles()
 			_GUICtrlButton_SetImageList($g_hBtnPushSharedPrefs, $bIconPush, 4)
 			GUICtrlSetOnEvent(-1, "btnPushSharedPrefs")
 			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "BtnPushSharedPrefs_Info_01", "Push CoC shared_prefs folder"))
+		$g_hBtnRecycle = GUICtrlCreateButton("", $x + 283, $y + 2, 22, 22)
+			_GUICtrlButton_SetImageList($g_hBtnRecycle, $bIconRecycle, 4)
+			GUICtrlSetOnEvent(-1, "btnRecycle")
+			GUICtrlSetState(-1, $GUI_SHOW)
+			_GUICtrlSetTip(-1,  GetTranslatedFileIni("MBR GUI Design Child Bot - Profiles", "BtnRecycle_Info_01", "Recycle Profile by removing all settings no longer suported that could lead to bad behaviour"))
+			If GUICtrlRead($g_hCmbProfile) = "<No Profiles>" Then
+				GUICtrlSetState(-1, $GUI_DISABLE)
+			Else
+				GUICtrlSetState(-1, $GUI_ENABLE)
+			EndIf
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 	Local $x = 25, $y = 105

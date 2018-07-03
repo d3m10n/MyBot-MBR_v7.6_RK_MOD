@@ -9,7 +9,7 @@
 
 Func setupProfileComboBox()
 	; Array to store Profile names to add to ComboBox
-	Local $profileString = ""
+	$profileString = ""
 	Local $aProfiles = _FileListToArray($g_sProfilePath, "*", $FLTA_FOLDERS)
 	Local $aProfileList = ["<No Profiles>"]
 	If @error Then

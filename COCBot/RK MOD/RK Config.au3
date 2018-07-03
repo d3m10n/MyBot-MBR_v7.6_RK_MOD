@@ -104,6 +104,37 @@ Func ReadConfig_RKMod()
 		
 	IniReadS($g_bRestartSearchGrabHero, $g_sProfileConfigPath, "search", "GrabHealHero", False, "Bool")
 	
+	
+	;================================================== ; Switch Profile - Added by RK MOD ==================== ;
+	
+	IniReadS($ichkGoldSwitchMax, $g_sProfileConfigPath, "profiles", "chkGoldSwitchMax", 0, "int")
+	IniReadS($icmbGoldMaxProfile, $g_sProfileConfigPath, "profiles", "cmbGoldMaxProfile", 0, "int")
+	IniReadS($itxtMaxGoldAmount, $g_sProfileConfigPath, "profiles", "txtMaxGoldAmount", 6000000, "int")
+	IniReadS($ichkGoldSwitchMin, $g_sProfileConfigPath, "profiles", "chkGoldSwitchMin", 0, "int")
+	IniReadS($icmbGoldMinProfile, $g_sProfileConfigPath, "profiles", "cmbGoldMinProfile", 0, "int")
+	IniReadS($itxtMinGoldAmount, $g_sProfileConfigPath, "profiles", "txtMinGoldAmount", 500000, "int")
+
+	IniReadS($ichkElixirSwitchMax, $g_sProfileConfigPath, "profiles", "chkElixirSwitchMax", 0, "int")
+	IniReadS($icmbElixirMaxProfile, $g_sProfileConfigPath, "profiles", "cmbElixirMaxProfile", 0, "int")
+	IniReadS($itxtMaxElixirAmount, $g_sProfileConfigPath, "profiles", "txtMaxElixirAmount", 6000000, "int")
+	IniReadS($ichkElixirSwitchMin, $g_sProfileConfigPath, "profiles", "chkElixirSwitchMin", 0, "int")
+	IniReadS($icmbElixirMinProfile, $g_sProfileConfigPath, "profiles", "cmbElixirMinProfile", 0, "int")
+	IniReadS($itxtMinElixirAmount, $g_sProfileConfigPath, "profiles", "txtMinElixirAmount", 500000, "int")
+
+	IniReadS($ichkDESwitchMax, $g_sProfileConfigPath, "profiles", "chkDESwitchMax", 0, "int")
+	IniReadS($icmbDEMaxProfile, $g_sProfileConfigPath, "profiles", "cmbDEMaxProfile", 0, "int")
+	IniReadS($itxtMaxDEAmount, $g_sProfileConfigPath, "profiles", "txtMaxDEAmount", 200000, "int")
+	IniReadS($ichkDESwitchMin, $g_sProfileConfigPath, "profiles", "chkDESwitchMin", 0, "int")
+	IniReadS($icmbDEMinProfile, $g_sProfileConfigPath, "profiles", "cmbDEMinProfile", 0, "int")
+	IniReadS($itxtMinDEAmount, $g_sProfileConfigPath, "profiles", "txtMinDEAmount", 10000, "int")
+
+	IniReadS($ichkTrophySwitchMax, $g_sProfileConfigPath, "profiles", "chkTrophySwitchMax", 0, "int")
+	IniReadS($icmbTrophyMaxProfile, $g_sProfileConfigPath, "profiles", "cmbTrophyMaxProfile", 0, "int")
+	IniReadS($itxtMaxTrophyAmount, $g_sProfileConfigPath, "profiles", "txtMaxTrophyAmount", 3000, "int")
+	IniReadS($ichkTrophySwitchMin, $g_sProfileConfigPath, "profiles", "chkTrophySwitchMin", 0, "int")
+	IniReadS($icmbTrophyMinProfile, $g_sProfileConfigPath, "profiles", "cmbTrophyMinProfile", 0, "int")
+	IniReadS($itxtMinTrophyAmount, $g_sProfileConfigPath, "profiles", "txtMinTrophyAmount", 1000, "int")
+	
 EndFunc   ;==>ReadConfig_RKMod
 
 Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
@@ -200,6 +231,36 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	; ================================================ Grab Healed Heroes - Added by RK MOD ======================================== ;
 	
 	_Ini_Add("search", "GrabHealHero", $g_bRestartSearchGrabHero ? 1 : 0)
+	
+	; ================================================ Switch Profile - Added by RK MOD ======================================== ;
+	
+	_Ini_Add("profiles", "chkGoldSwitchMax", $ichkGoldSwitchMax ? 1 : 0)
+	_Ini_Add("profiles", "cmbGoldMaxProfile", $icmbGoldMaxProfile)
+	_Ini_Add("profiles", "txtMaxGoldAmount", $itxtMaxGoldAmount)
+	_Ini_Add("profiles", "chkGoldSwitchMin", $ichkGoldSwitchMin ? 1 : 0)
+	_Ini_Add("profiles", "cmbGoldMinProfile", $icmbGoldMinProfile)
+	_Ini_Add("profiles", "txtMinGoldAmount", $itxtMinGoldAmount)
+
+	_Ini_Add("profiles", "chkElixirSwitchMax", $ichkElixirSwitchMax ? 1 : 0)
+	_Ini_Add("profiles", "cmbElixirMaxProfile", $icmbElixirMaxProfile)
+	_Ini_Add("profiles", "txtMaxElixirAmount", $itxtMaxElixirAmount)
+	_Ini_Add("profiles", "chkElixirSwitchMin", $ichkElixirSwitchMin ? 1 : 0)
+	_Ini_Add("profiles", "cmbElixirMinProfile", $icmbElixirMinProfile)
+	_Ini_Add("profiles", "txtMinElixirAmount", $itxtMinElixirAmount)
+
+	_Ini_Add("profiles", "chkDESwitchMax", $ichkDESwitchMax ? 1 : 0)
+	_Ini_Add("profiles", "cmbDEMaxProfile", $icmbDEMaxProfile)
+	_Ini_Add("profiles", "txtMaxDEAmount", $itxtMaxDEAmount)
+	_Ini_Add("profiles", "chkDESwitchMin", $ichkDESwitchMin ? 1 : 0)
+	_Ini_Add("profiles", "cmbDEMinProfile", $icmbDEMinProfile)
+	_Ini_Add("profiles", "txtMinDEAmount", $itxtMinDEAmount)
+
+	_Ini_Add("profiles", "chkTrophySwitchMax", $ichkTrophySwitchMax ? 1 : 0)
+	_Ini_Add("profiles", "cmbTrophyMaxProfile", $icmbTrophyMaxProfile)
+	_Ini_Add("profiles", "txtMaxTrophyAmount", $itxtMaxTrophyAmount)
+	_Ini_Add("profiles", "chkTrophySwitchMin", $ichkTrophySwitchMin ? 1 : 0)
+	_Ini_Add("profiles", "cmbTrophyMinProfile", $icmbTrophyMinProfile)
+	_Ini_Add("profiles", "txtMinTrophyAmount", $itxtMinTrophyAmount)
 	
 EndFunc   ;==>SaveConfig_RKMod
 
@@ -300,6 +361,36 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			; ================================================ Grab Healed Heroes - Added by RK MOD ======================================== ;
 			
 			$g_bRestartSearchGrabHero = (GUICtrlRead($g_hChkRestartSearchGrabHero) = $GUI_CHECKED)
+			
+			; ================================================ Switch Profile - Added by RK MOD ======================================== ;
+			
+			$ichkGoldSwitchMax = GUICtrlRead($g_hChkGoldSwitchMax) = $GUI_CHECKED ? 1 : 0
+			$icmbGoldMaxProfile = _GUICtrlComboBox_GetCurSel($g_hCmbGoldMaxProfile)
+			$itxtMaxGoldAmount = GUICtrlRead($g_hTxtMaxGoldAmount)
+			$ichkGoldSwitchMin = GUICtrlRead($g_hChkGoldSwitchMin) = $GUI_CHECKED ? 1 : 0
+			$icmbGoldMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbGoldMinProfile)
+			$itxtMinGoldAmount = GUICtrlRead($g_hTxtMinGoldAmount)
+
+			$ichkElixirSwitchMax = GUICtrlRead($g_hChkElixirSwitchMax) = $GUI_CHECKED ? 1 : 0
+			$icmbElixirMaxProfile = _GUICtrlComboBox_GetCurSel($g_hCmbElixirMaxProfile)
+			$itxtMaxElixirAmount = GUICtrlRead($g_hTxtMaxElixirAmount)
+			$ichkElixirSwitchMin = GUICtrlRead($g_hChkElixirSwitchMin) = $GUI_CHECKED ? 1 : 0
+			$icmbElixirMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbElixirMinProfile)
+			$itxtMinElixirAmount = GUICtrlRead($g_hTxtMinElixirAmount)
+
+			$ichkDESwitchMax = GUICtrlRead($g_hChkDESwitchMax) = $GUI_CHECKED ? 1 : 0
+			$icmbDEMaxProfile = _GUICtrlComboBox_GetCurSel($g_hCmbDEMaxProfile)
+			$itxtMaxDEAmount = GUICtrlRead($g_hTxtMaxDEAmount)
+			$ichkDESwitchMin = GUICtrlRead($g_hChkDESwitchMin) = $GUI_CHECKED ? 1 : 0
+			$icmbDEMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbDEMinProfile)
+			$itxtMinDEAmount = GUICtrlRead($g_hTxtMinDEAmount)
+
+			$ichkTrophySwitchMax = GUICtrlRead($g_hChkTrophySwitchMax) = $GUI_CHECKED ? 1 : 0
+			$icmbTrophyMaxProfile = _GUICtrlComboBox_GetCurSel($g_hCmbTrophyMaxProfile)
+			$itxtMaxTrophyAmount = GUICtrlRead($g_hTxtMaxTrophyAmount)
+			$ichkTrophySwitchMin = GUICtrlRead($g_hChkTrophySwitchMin) = $GUI_CHECKED ? 1 : 0
+			$icmbTrophyMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbTrophyMinProfile)
+			$itxtMinTrophyAmount = GUICtrlRead($g_hTxtMinTrophyAmount)
 			
 		Case "Read"
 
@@ -412,6 +503,36 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			; ================================================ Grab Healed Heroes - Added by RK MOD ======================================== ;
 			
 			GUICtrlSetState($g_hChkRestartSearchGrabHero, $g_bRestartSearchGrabHero ? $GUI_CHECKED : $GUI_UNCHECKED)
+			
+			; ================================================  Switch Profile - Added by RK MOD ======================================== ;
+			
+			GUICtrlSetState($g_hChkGoldSwitchMax, $ichkGoldSwitchMax = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbGoldMaxProfile, $icmbGoldMaxProfile)
+			GUICtrlSetData($g_hTxtMaxGoldAmount, $itxtMaxGoldAmount)
+			GUICtrlSetState($g_hChkGoldSwitchMin, $ichkGoldSwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbGoldMinProfile, $icmbGoldMinProfile)
+			GUICtrlSetData($g_hTxtMinGoldAmount, $itxtMinGoldAmount)
+
+			GUICtrlSetState($g_hChkElixirSwitchMax, $ichkElixirSwitchMax = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbElixirMaxProfile, $icmbElixirMaxProfile)
+			GUICtrlSetData($g_hTxtMaxElixirAmount, $itxtMaxElixirAmount)
+			GUICtrlSetState($g_hChkElixirSwitchMin, $ichkElixirSwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbElixirMinProfile, $icmbElixirMinProfile)
+			GUICtrlSetData($g_hTxtMinElixirAmount, $itxtMinElixirAmount)
+
+			GUICtrlSetState($g_hChkDESwitchMax, $ichkDESwitchMax = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbDEMaxProfile, $icmbDEMaxProfile)
+			GUICtrlSetData($g_hTxtMaxDEAmount, $itxtMaxDEAmount)
+			GUICtrlSetState($g_hChkDESwitchMin, $ichkDESwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbDEMinProfile, $icmbDEMinProfile)
+			GUICtrlSetData($g_hTxtMinDEAmount, $itxtMinDEAmount)
+
+			GUICtrlSetState($g_hChkTrophySwitchMax, $ichkTrophySwitchMax = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbTrophyMaxProfile, $icmbTrophyMaxProfile)
+			GUICtrlSetData($g_hTxtMaxTrophyAmount, $itxtMaxTrophyAmount)
+			GUICtrlSetState($g_hChkTrophySwitchMin, $ichkTrophySwitchMin = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbTrophyMinProfile, $icmbTrophyMinProfile)
+			GUICtrlSetData($g_hTxtMinTrophyAmount, $itxtMinTrophyAmount)
 			
 	EndSwitch
 

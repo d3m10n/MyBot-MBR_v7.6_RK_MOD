@@ -18,8 +18,8 @@
 #include <WinAPIEx.au3>
 
 Func ChatbotReadSettings()	
-	$ClanMessages = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "genericMsgClan", "Testing on Chat|Hey all"), "|", 2)
-	$ClanResponses0 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "responseMsgClan", "keyword:Response|hello:Hi, Welcome to the clan|hey:Hey, how's it going?"), "|", 2)
+	$ClanMessages = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "genericMsgClan", "Testing on Chat|Hey all"), "|", 2)
+	$ClanResponses0 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "responseMsgClan", "keyword:Response|hello:Hi, Welcome to the clan|hey:Hey, how's it going?"), "|", 2)
 	global $ClanResponses1[UBound($ClanResponses0)][2] ;
 	For $a = 0 To UBound($ClanResponses0) - 1
 		$TmpResp = StringSplit($ClanResponses0[$a], ":", 2)
@@ -37,10 +37,10 @@ Func ChatbotReadSettings()
 
 	$ClanResponses = $ClanResponses1
 
-	$GlobalMessages1 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications"), "|", 2)
-	$GlobalMessages2 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg2", "Join now|Apply now"), "|", 2)
-	$GlobalMessages3 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars"), "|", 2)
-	$GlobalMessages4 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg4", "Adults Only| 18+"), "|", 2)
+	$GlobalMessages1 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications"), "|", 2)
+	$GlobalMessages2 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg2", "Join now|Apply now"), "|", 2)
+	$GlobalMessages3 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars"), "|", 2)
+	$GlobalMessages4 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg4", "Adults Only| 18+"), "|", 2)
 EndFunc   ;==>ChatbotReadSettings
 
 
@@ -500,7 +500,7 @@ Func ChatbotMessage() ; run the chatbot
 		EndIf
 ;======================================================================================
 		If Not ChatbotChatOpen() Then Return
-		SetLog(GetTranslated(106, 41, "Chatbot: Sending chats to global"), $COLOR_GREEN)
+		SetLog("Chatbot: Sending chats to global", $COLOR_GREEN)
 		; assemble a message
 		Global $message[4]
 		$message[0] = $GlobalMessages1[Random(0, UBound($GlobalMessages1) - 1, 1)]

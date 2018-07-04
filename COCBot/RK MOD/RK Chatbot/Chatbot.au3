@@ -1,5 +1,5 @@
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: Chat by RK MOD
+; Name ..........: NEW Chatbot by RK MOD
 ; Description ...: This file Read/Save/Apply RK MODs settings
 ; Syntax ........: ---
 ; Parameters ....: ---
@@ -18,8 +18,8 @@
 #include <WinAPIEx.au3>
 
 Func ChatbotReadSettings()	
-	$ClanMessages = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "genericMsgClan", " "), "|", 2)
-	$ClanResponses0 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "responseMsgClan", " "), "|", 2)
+	$ClanMessages = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "genericMsgClan", "Testing on Chat|Hey all"), "|", 2)
+	$ClanResponses0 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "responseMsgClan", "keyword:Response|hello:Hi, Welcome to the clan|hey:Hey, how's it going?"), "|", 2)
 	global $ClanResponses1[UBound($ClanResponses0)][2] ;
 	For $a = 0 To UBound($ClanResponses0) - 1
 		$TmpResp = StringSplit($ClanResponses0[$a], ":", 2)
@@ -37,36 +37,11 @@ Func ChatbotReadSettings()
 
 	$ClanResponses = $ClanResponses1
 
-	$GlobalMessages1 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg1", " "), "|", 2)
-	$GlobalMessages2 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg2", " "), "|", 2)
-	$GlobalMessages3 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg3", " "), "|", 2)
-	$GlobalMessages4 = StringSplit(IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg4", " "), "|", 2)
+	$GlobalMessages1 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications"), "|", 2)
+	$GlobalMessages2 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg2", "Join now|Apply now"), "|", 2)
+	$GlobalMessages3 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars"), "|", 2)
+	$GlobalMessages4 = StringSplit(IniRead($g_sProfileConfigPath, "Pico Chatbot", "globalMsg4", "Adults Only| 18+"), "|", 2)
 EndFunc   ;==>ChatbotReadSettings
-
-;Func ChatGuiCheckboxUpdate()
-;	$ChatbotChatGlobal = GUICtrlRead($chkGlobalChat) = $GUI_CHECKED
-;	$ChatbotScrambleGlobal = GUICtrlRead($chkGlobalScramble) = $GUI_CHECKED
-;	$ChatbotSwitchLang = GUICtrlRead($chkSwitchLang) = $GUI_CHECKED
-
-;	$ChatbotChatClan = GUICtrlRead($chkClanChat) = $GUI_CHECKED
-;	$ChatbotClanUseResponses = GUICtrlRead($chkUseResponses) = $GUI_CHECKED
-;	$ChatbotClanAlwaysMsg = GUICtrlRead($chkUseGeneric) = $GUI_CHECKED
-;	$ChatbotUseNotify = GUICtrlRead($chkChatNotify) = $GUI_CHECKED
-;	$ChatbotPbSendNew = GUICtrlRead($chkPbSendNewChats) = $GUI_CHECKED    
-;	$icmbLang = _GUICtrlComboBox_GetCurSel($cmbLang)
-;	IniWrite($chatIni, "Lang", "cmbLang", $icmbLang)
-;	IniWrite($chatIni, "global", "use", $ChatbotChatGlobal)
-;	IniWrite($chatIni, "global", "scramble", $ChatbotScrambleGlobal)
-;	IniWrite($chatIni, "global", "swlang", $ChatbotSwitchLang)
-
-;	IniWrite($chatIni, "clan", "use", $ChatbotChatClan)
-;	IniWrite($chatIni, "clan", "responses", $ChatbotClanUseResponses)
-;	IniWrite($chatIni, "clan", "always", $ChatbotClanAlwaysMsg)
-;	IniWrite($chatIni, "clan", "Notify", $ChatbotUseNotify)
-;	IniWrite($chatIni, "clan", "pbsendnew", $ChatbotPbSendNew)   
-;	ChatGuiCheckboxUpdateAT()
-
-;EndFunc   ;==>ChatGuiCheckboxUpdate
 
 
 Func chkGlobalChat()    
@@ -175,17 +150,17 @@ Func chkPbSendNewChats()
 	EndIf
 EndFunc   ;==>chkPbSendNewChats
 
-;Func ChatGuiCheckboxDisableAT()
-;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-;		GUICtrlSetState($i, $GUI_DISABLE)
-;	Next
-;EndFunc   ;==>ChatGuiCheckboxDisableAT
-;Func ChatGuiCheckboxEnableAT()
-;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-;		GUICtrlSetState($i, $GUI_ENABLE)
-;	Next
-;	ChatGuiCheckboxUpdateAT()
-;EndFunc   ;==>ChatGuiCheckboxEnableAT
+Func ChatGuiCheckboxDisableAT()
+	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
+		GUICtrlSetState($i, $GUI_DISABLE)
+	Next
+EndFunc   ;==>ChatGuiCheckboxDisableAT
+Func ChatGuiCheckboxEnableAT()
+	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
+		GUICtrlSetState($i, $GUI_ENABLE)
+	Next
+	ChatGuiCheckboxUpdateAT()
+EndFunc   ;==>ChatGuiCheckboxEnableAT
 
 
 Func ChatGuiEditUpdate()
@@ -213,7 +188,9 @@ EndFunc   ;==>ChatGuiEditUpdate
 ; All of the following return True if the script should
 ; continue running, and false otherwise
 Func ChatbotChatOpen() ; open the chat area
-	Click(20, 379, 1) ; open chat
+    ClickP($aAway, 1, 0, "#0000") ;Click Away to prevent any pages on top
+	If _Sleep(1000) Then Return
+	Click(20, 383, 1, 0) ; open chat
 	If _Sleep(1000) Then Return
 	Return True
 EndFunc   ;==>ChatbotChatOpen
@@ -351,7 +328,7 @@ Func ChangeLanguageToEN()
 	If _Sleep(1000) Then Return
 	Click(165, 180, 1) ;English
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 42, "Chatbot: Switching language EN"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language EN", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToEN
@@ -365,7 +342,7 @@ Func ChangeLanguageToFRA()
 	If _Sleep(1000) Then Return
 	Click(163, 230, 1) ;Franch
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 53, "Chatbot: Switching language FRA"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language FRA", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToFra
@@ -379,7 +356,7 @@ Func ChangeLanguageToRU()
 	If _Sleep(1000) Then Return
 	Click(173, 607, 1) ;Russian
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 61, "Chatbot: Switching language RU"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language RU", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToRU
@@ -393,7 +370,7 @@ Func ChangeLanguageToDE()
 	If _Sleep(1000) Then Return
 	Click(163, 273, 1) ;DEUTCH
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 54, "Chatbot: Switching language DE"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language DE", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToDE
@@ -407,7 +384,7 @@ Func ChangeLanguageToES()
 	If _Sleep(1000) Then Return
 	Click(163, 325, 1) ;Ispanol
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 55, "Chatbot: Switching language ES"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language ES", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToES
@@ -421,7 +398,7 @@ Func ChangeLanguageToITA()
 	If _Sleep(1000) Then Return
 	Click(163, 375, 1) ;ITALYA
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 56, "Chatbot: Switching language ITA"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language ITA", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToITA
@@ -435,7 +412,7 @@ Func ChangeLanguageToNL()
 	If _Sleep(1000) Then Return
 	Click(163, 425, 1) ;NL
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 57, "Chatbot: Switching language NL"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language NL", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToNL
@@ -449,7 +426,7 @@ Func ChangeLanguageToNO()
 	If _Sleep(1000) Then Return
 	Click(163, 475, 1) ;NORSK
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 58, "Chatbot: Switching language NO"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language NO", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToNO
@@ -463,7 +440,7 @@ Func ChangeLanguageToPR()
 	If _Sleep(1000) Then Return
 	Click(163, 525, 1) ;PORTUGAL
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 59, "Chatbot: Switching language PR"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language PR", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToPR
@@ -477,7 +454,7 @@ Func ChangeLanguageToTR()
 	If _Sleep(1000) Then Return
 	Click(163, 575, 1) ;TURK
 	If _Sleep(500) Then Return
-	SetLog(GetTranslated(106, 60, "Chatbot: Switching language TR"), $COLOR_GREEN)
+	SetLog("Chatbot: Switching language TR", $COLOR_GREEN)
 	Click(513, 426, 1) ;language
 	If _Sleep(1000) Then Return
 EndFunc   ;==>ChangeLanguageToTR
@@ -489,9 +466,9 @@ Func ChatbotMessage() ; run the chatbot
     Local $sendGlobalChat = chatTimer($startGlobChatTimer, "GLOBAL")
 	
 	If $ChatbotChatGlobal Then
-		SetLog(GetTranslated(106, 37, "Chatbot: Sending some chats"), $COLOR_GREEN)
+		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	ElseIf $ChatbotChatClan Then
-		SetLog(GetTranslated(106, 38, "Chatbot: Sending some chats"), $COLOR_GREEN)
+		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	EndIf
 	If $ChatbotChatGlobal = 1 And $sendGlobalChat Then
 	   $startGlobChatTimer = TimerInit()	
@@ -551,7 +528,7 @@ Func ChatbotMessage() ; run the chatbot
 
 	If $ChatbotChatClan Then
 		If Not ChatbotChatOpen() Then Return
-		SetLog(GetTranslated(106, 43, "Chatbot: Sending chats to clan"), $COLOR_GREEN)
+		SetLog("Chatbot: Sending chats to clan", $COLOR_GREEN)
 		If Not ChatbotSelectClanChat() Then Return
 
 		Local $SentClanChat = False
@@ -569,7 +546,7 @@ Func ChatbotMessage() ; run the chatbot
 		EndIf
 
 		If UBound($ChatbotQueuedChats) > 0 Then
-			SetLog(GetTranslated(106, 44, "Chatbot: Sending Notify chats"), $COLOR_GREEN)
+			SetLog("Chatbot: Sending Notify chats", $COLOR_GREEN)
 
 			For $a = 0 To UBound($ChatbotQueuedChats) - 1
 			Local $ChatToSend = $ChatbotQueuedChats[$a]
@@ -586,14 +563,14 @@ Func ChatbotMessage() ; run the chatbot
 			ChatbotNotifySendChat()
 
 			If Not ChatbotChatClose() Then Return
-			SetLog(GetTranslated(106, 45, "Chatbot: Done"), $COLOR_GREEN)
+			SetLog("Chatbot: Done"), $COLOR_GREEN)
 			Return
 		EndIf
 
 		If ChatbotIsLastChatNew() Then
 			; get text of the latest message
 			Local $ChatMsg = StringStripWS(getOcrAndCapture("coc-latinA", 30, 148, 270, 13, False), 7)
-			SetLog(GetTranslated(106, 46, "Found chat message: ") & $ChatMsg, $COLOR_GREEN)
+			SetLog("Found chat message: ") & $ChatMsg, $COLOR_GREEN)
 			Local $SentMessage = False
 
 			If $ChatMsg = "" Or $ChatMsg = " " Then
@@ -609,7 +586,7 @@ Func ChatbotMessage() ; run the chatbot
 				For $a = 0 To UBound($ClanResponses) - 1
 					If StringInStr($ChatMsg, $ClanResponses[$a][0]) Then
 						Local $Response = $ClanResponses[$a][1]
-						SetLog(GetTranslated(106, 47, "Sending response: ") & $Response, $COLOR_GREEN)
+						SetLog("Sending response: ") & $Response, $COLOR_GREEN)
 						If Not ChatbotChatClanInput() Then Return
 						If Not ChatbotChatInput($Response) Then Return
 						If Not ChatbotChatSendClan() Then Return
@@ -641,9 +618,9 @@ Func ChatbotMessage() ; run the chatbot
 		If Not ChatbotChatClose() Then Return
 	EndIf
 	If $ChatbotChatGlobal Then
-		SetLog(GetTranslated(106, 49, "Chatbot: Done chatting"), $COLOR_GREEN)
+		SetLog("Chatbot: Done chatting", $COLOR_GREEN)
 	ElseIf $ChatbotChatClan Then
-		SetLog(GetTranslated(106, 50, "Chatbot: Done chatting"), $COLOR_GREEN)
+		SetLog("Chatbot: Done chatting", $COLOR_GREEN)
 	EndIf
 EndFunc   ;==>ChatbotMessage
 

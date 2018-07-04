@@ -254,11 +254,11 @@ Func ChatbotChatSendGlobal() ; click send
 EndFunc   ;==>ChatbotChatSendGlobal
 
 Func ChatbotStartTimer()
-	$ChatbotStartTime = TimerInit()
+	$ChatbotStartTime = __TimerInit()
 EndFunc   ;==>ChatbotStartTimer
 
 Func ChatbotIsInterval()
-    Local $Time_Difference = TimerDiff($ChatbotStartTime)
+    Local $Time_Difference = __TimerDiff($ChatbotStartTime)
 	If $Time_Difference > $ChatbotReadInterval * 1000 Then
 		Return True
 	Else
@@ -471,7 +471,7 @@ Func ChatbotMessage() ; run the chatbot
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	EndIf
 	If $ChatbotChatGlobal = 1 And $sendGlobalChat Then
-	   $startGlobChatTimer = TimerInit()	
+	   $startGlobChatTimer = __TimerInit()	
 ;========================Kychera modified==========================================
 		If $ChatbotSwitchLang = 1 Then
 		Switch GUICtrlRead($cmbLang)
@@ -664,7 +664,7 @@ EndFunc ;==>_Encoding_JavaUnicodeDecode
 
 ;Timer for global chat(Time Delay)
 Func chatTimer($startTimer, $chatType)
-    Local $timeDiff = TimerDiff($startTimer) / 1000
+    Local $timeDiff =__TimerDiff($startTimer) / 1000
     If $chatType = "GLOBAL" Then
  	   If $timeDiff > $globChatTimeDalay Then
  		  Return True

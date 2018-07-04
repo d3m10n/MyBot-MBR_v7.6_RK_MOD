@@ -56,7 +56,7 @@ Global $chkGlobalChat = 0,$chkGlobalScramble = 0,$chkSwitchLang = 0,$TxtGlobChat
 Global $chkUseResponses = 0,$chkUseGeneric = 0,$chkChatNotify = 0,$chkPbSendNewChats = 0
 Global $editGlobalMessages1 = "", $editGlobalMessages2 = "",$editGlobalMessages3 = "",$editGlobalMessages4 = ""
 Global $editResponses = 0,$editGeneric = 0,$ChatbotQueuedChats[0],$ChatbotReadQueued = False,$ChatbotReadInterval = 0,$ChatbotIsOnInterval = False,$TmpResp
-Global $g_alblAinGlobal,$g_alblSGchats,$g_alblSwitchlang,$g_alblChatclan,$g_alblUsecustomresp,$g_alblUsegenchats,$g_alblNotifyclanchat,$g_alblSwitchlang,$g_alblUseremotechat,$g_alblTimeDalay
+Global $g_alblAinGlobal,$g_alblSGchats,$g_alblSwitchlang,$g_alblChatclan,$g_alblUsecustomresp,$g_alblUsegenchats,$g_alblNotifyclanchat,$g_alblSwitchlang,$g_alblUseremotechat
 
 
 ; Switch Profiles
@@ -322,15 +322,7 @@ Func TabItem3()
 	_GUICtrlSetTip($chkGlobalScramble, "Scramble the message pieces defined in the textboxes below to be in a random order")
    GUICtrlSetState($chkGlobalScramble, $ChatbotScrambleGlobal)
    GUICtrlSetOnEvent(-1, "chkGlobalScramble")
-   
-   
-   $g_alblTimeDalay = GUICtrlCreateLabel("Time Dalay", 46 - $x, 232 - $y, 55, 17)
-   $TxtGlobChatTimeDalay = GUICtrlCreateInput("0", 120 - $x, 230 - $y, 30, 21, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
-   _GUICtrlSetTip($TxtGlobChatTimeDalay, "Global Chat time dalay in seconds.")
-   GUICtrlSetLimit(-1, 3)
-  ;GUICtrlSetOnEvent(-1, "txtGlobChatTimeDalay")
-   GUICtrlSetState($TxtGlobChatTimeDalay, $iTxtGlobChatTimeDalay)
-   
+      
    $chkSwitchLang = GUICtrlCreateCheckbox("Switch languages", 176 - $x, 184 - $y, 81, 17)
 	_GUICtrlSetTip($chkSwitchLang, "Switch languages after spamming for a new global chatroom")
    GUICtrlSetState($chkSwitchLang, $ChatbotSwitchLang)

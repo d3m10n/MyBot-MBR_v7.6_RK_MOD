@@ -48,7 +48,7 @@ Func chkGlobalChat()
     If GUICtrlRead($chkGlobalChat) = $GUI_CHECKED Then
 	$ChatbotChatGlobal = 1
 		GUICtrlSetState($chkGlobalScramble, $GUI_ENABLE)
-		GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_ENABLE)
+		;GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_ENABLE)
 		GUICtrlSetState($chkSwitchLang, $GUI_ENABLE)
 		GUICtrlSetState($cmbLang, $GUI_SHOW)
 		GUICtrlSetState($editGlobalMessages1, $GUI_ENABLE)
@@ -58,7 +58,7 @@ Func chkGlobalChat()
 	Else
 	$ChatbotChatGlobal = 0
 		GUICtrlSetState($chkGlobalScramble, $GUI_DISABLE)
-		GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_DISABLE)
+		;GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_DISABLE)
 		GUICtrlSetState($chkSwitchLang, $GUI_DISABLE)
 		GUICtrlSetState($cmbLang, $GUI_INDETERMINATE)
 		GUICtrlSetState($editGlobalMessages1, $GUI_DISABLE)
@@ -253,18 +253,18 @@ Func ChatbotChatSendGlobal() ; click send
 	Return True
 EndFunc   ;==>ChatbotChatSendGlobal
 
-Func ChatbotStartTimer()
-	$ChatbotStartTime = TimerInit()
-EndFunc   ;==>ChatbotStartTimer
+;Func ChatbotStartTimer()
+;	$ChatbotStartTime = TimerInit()
+;EndFunc   ;==>ChatbotStartTimer
 
-Func ChatbotIsInterval()
-    Local $Time_Difference = TimerDiff($ChatbotStartTime)
-	If $Time_Difference > $ChatbotReadInterval * 1000 Then
-		Return True
-	Else
-		Return False
-	EndIf
-EndFunc   ;==>ChatbotIsInterval
+;Func ChatbotIsInterval()
+ ;   Local $Time_Difference = TimerDiff($ChatbotStartTime)
+;	If $Time_Difference > $ChatbotReadInterval * 1000 Then
+;		Return True
+;	Else
+;		Return False
+;	EndIf
+;EndFunc   ;==>ChatbotIsInterval
 
 Func ChatbotIsLastChatNew() ; returns true if the last chat was not by you, false otherwise
 	_CaptureRegion()
@@ -294,24 +294,24 @@ Func ChatbotNotifySendChat()
    If Not ($iDelete) Then SetLog("Chatbot: Failed to delete temp file", $COLOR_RED)
 EndFunc
 
-Func ChatbotNotifyQueueChat($Chat)
-   If Not $ChatbotUseNotify Then Return
+Func ChatbotPushbulletQueueChat($Chat)
+   If Not $ChatbotUsePushbullet Then Return
    _ArrayAdd($ChatbotQueuedChats, $Chat)
 EndFunc
 
-Func ChatbotNotifyQueueChatRead()
-   If Not $ChatbotUseNotify Then Return
+Func ChatbotPushbulletQueueChatRead()
+   If Not $ChatbotUsePushbullet Then Return
    $ChatbotReadQueued = True
 EndFunc
 
-Func ChatbotNotifyStopChatRead()
-   If Not $ChatbotUseNotify Then Return
+Func ChatbotPushbulletStopChatRead()
+   If Not $ChatbotUsePushbullet Then Return
    $ChatbotReadInterval = 0
    $ChatbotIsOnInterval = False
 EndFunc
 
-Func ChatbotNotifyIntervalChatRead($Interval)
-   If Not $ChatbotUseNotify Then Return
+Func ChatbotPushbulletIntervalChatRead($Interval)
+   If Not $ChatbotUsePushbullet Then Return
    $ChatbotReadInterval = $Interval
    $ChatbotIsOnInterval = True
    ChatbotStartTimer()
@@ -463,7 +463,7 @@ EndFunc   ;==>ChangeLanguageToTR
 
 Func ChatbotMessage() ; run the chatbot
 
-    Local $sendGlobalChat = chatTimer($startGlobChatTimer, "GLOBAL")
+    Local $sendGlobalChat 
 	
 	If $ChatbotChatGlobal Then
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
@@ -471,7 +471,7 @@ Func ChatbotMessage() ; run the chatbot
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	EndIf
 	If $ChatbotChatGlobal = 1 And $sendGlobalChat Then
-	   $startGlobChatTimer = TimerInit()	
+	   ;$startGlobChatTimer = TimerInit()	
 ;========================Kychera modified==========================================
 		If $ChatbotSwitchLang = 1 Then
 		Switch GUICtrlRead($cmbLang)
@@ -663,15 +663,15 @@ EndFunc ;==>_Encoding_JavaUnicodeDecode
 ;============================================
 
 ;Timer for global chat(Time Delay)
-Func chatTimer($startTimer, $chatType)
-    Local $timeDiff = TimerDiff($startTimer) / 1000
-    If $chatType = "GLOBAL" Then
- 	   If $timeDiff > $globChatTimeDalay Then
- 		  Return True
- 	   Else
- 		  SetLog("Skip sending chats to global chat", $COLOR_RED)
- 		  SetLog("Time Delay : [" & $globChatTimeDalay - $timeDiff & "]")
- 		  Return False
- 	   EndIf
-    EndIf
-EndFunc
+;Func chatTimer($startTimer, $chatType)
+ ;   Local $timeDiff = TimerDiff($startTimer) / 1000
+ ;   If $chatType = "GLOBAL" Then
+;	   If $timeDiff > $globChatTimeDalay Then
+ ;		  Return True
+ ;	   Else
+ ;		  SetLog("Skip sending chats to global chat", $COLOR_RED)
+ ;		  SetLog("Time Delay : [" & $globChatTimeDalay - $timeDiff & "]")
+ ;		  Return False
+ ;	   EndIf
+ ;   EndIf
+;EndFunc

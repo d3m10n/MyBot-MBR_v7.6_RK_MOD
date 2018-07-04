@@ -150,17 +150,17 @@ Func chkPbSendNewChats()
 	EndIf
 EndFunc   ;==>chkPbSendNewChats
 
-Func ChatGuiCheckboxDisableAT()
-	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-		GUICtrlSetState($i, $GUI_DISABLE)
-	Next
-EndFunc   ;==>ChatGuiCheckboxDisableAT
-Func ChatGuiCheckboxEnableAT()
-	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-		GUICtrlSetState($i, $GUI_ENABLE)
-	Next
-	ChatGuiCheckboxUpdateAT()
-EndFunc   ;==>ChatGuiCheckboxEnableAT
+;Func ChatGuiCheckboxDisableAT()
+;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
+;		GUICtrlSetState($i, $GUI_DISABLE)
+;	Next
+;EndFunc   ;==>ChatGuiCheckboxDisableAT
+;Func ChatGuiCheckboxEnableAT()
+;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
+;		GUICtrlSetState($i, $GUI_ENABLE)
+;	Next
+;	ChatGuiCheckboxUpdateAT()
+;EndFunc   ;==>ChatGuiCheckboxEnableAT
 
 
 Func ChatGuiEditUpdate()

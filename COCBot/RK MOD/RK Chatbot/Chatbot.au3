@@ -91,8 +91,6 @@ Func chkSwitchLang()
 	Else
    	    GUICtrlSetState($cmbLang, $GUI_DISABLE)
 	EndIf	
-	;_GUICtrlComboBox_SetCurSel($cmbLang, $icmbLang)
-	;$icmbLang = _GUICtrlComboBox_GetCurSel($cmbLang)
 EndFunc   ;==>chkSwitchLang	
 
 Func chkClanChat()
@@ -154,19 +152,6 @@ Func chkPbSendNewChats()
 		$ChatbotPbSendNew = 0
 	EndIf
 EndFunc   ;==>chkPbSendNewChats
-
-;Func ChatGuiCheckboxDisableAT()
-;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-;		GUICtrlSetState($i, $GUI_DISABLE)
-;	Next
-;EndFunc   ;==>ChatGuiCheckboxDisableAT
-;Func ChatGuiCheckboxEnableAT()
-;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
-;		GUICtrlSetState($i, $GUI_ENABLE)
-;	Next
-	
-;EndFunc   ;==>ChatGuiCheckboxEnableAT
-
 
 Func ChatGuiEditUpdate()
 Global $glb1 = GUICtrlRead($editGlobalMessages1)
@@ -483,13 +468,6 @@ Func ChatbotMessage() ; run the chatbot
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	EndIf
 	If $ChatbotChatGlobal Then
-		;If $chatdelaycount < $ichkchatdelay Then
-		;	SetLog(GetTranslated(106, 39, "Delaying Chat ") & ($ichkchatdelay - $chatdelaycount) & GetTranslated(106, 40, " more times"), $COLOR_GREEN)
-		;	$chatdelaycount += 1
-		;	Return
-		;ElseIf $chatdelaycount = $ichkchatdelay Then
-		;	$chatdelaycount = 0
-		;EndIf
 ;========================Kychera modified==========================================
 		If $ChatbotSwitchLang = 1 Then
 		Switch GUICtrlRead($cmbLang)
@@ -679,17 +657,3 @@ Func _Encoding_JavaUnicodeDecode($sString)
 	Return $sOut
 EndFunc ;==>_Encoding_JavaUnicodeDecode
 ;============================================
-
-;Timer for global chat(Time Delay)
-;Func chatTimer($startTimer, $chatType)
- ;   Local $timeDiff = TimerDiff($startTimer) / 1000
- ;   If $chatType = "GLOBAL" Then
-;	   If $timeDiff > $globChatTimeDalay Then
- ;		  Return True
- ;	   Else
- ;		  SetLog("Skip sending chats to global chat", $COLOR_RED)
- ;		  SetLog("Time Delay : [" & $globChatTimeDalay - $timeDiff & "]")
- ;		  Return False
- ;	   EndIf
- ;   EndIf
-;EndFunc

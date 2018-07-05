@@ -48,7 +48,6 @@ Func chkGlobalChat()
     If GUICtrlRead($chkGlobalChat) = $GUI_CHECKED Then
 	$ChatbotChatGlobal = 1
 		GUICtrlSetState($chkGlobalScramble, $GUI_ENABLE)
-		;GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_ENABLE)
 		GUICtrlSetState($chkSwitchLang, $GUI_ENABLE)
 		GUICtrlSetState($cmbLang, $GUI_SHOW)
 		GUICtrlSetState($editGlobalMessages1, $GUI_ENABLE)
@@ -58,7 +57,6 @@ Func chkGlobalChat()
 	Else
 	$ChatbotChatGlobal = 0
 		GUICtrlSetState($chkGlobalScramble, $GUI_DISABLE)
-		;GUICtrlSetState($TxtGlobChatTimeDalay, $GUI_DISABLE)
 		GUICtrlSetState($chkSwitchLang, $GUI_DISABLE)
 		GUICtrlSetState($cmbLang, $GUI_INDETERMINATE)
 		GUICtrlSetState($editGlobalMessages1, $GUI_DISABLE)
@@ -71,7 +69,6 @@ Func chkGlobalChat()
 	Else
     	GUICtrlSetState($cmbLang, $GUI_DISABLE)
 	EndIf	
-	;$iTxtGlobChatTimeDalay = GUICtrlRead($TxtGlobChatTimeDalay)
 EndFunc ;==>chkGlobalChat
 
 
@@ -107,6 +104,10 @@ Func chkClanChat()
 		GUICtrlSetState($chkPbSendNewChats, $GUI_ENABLE)
 		GUICtrlSetState($editResponses, $GUI_ENABLE)
 		GUICtrlSetState($editGeneric, $GUI_ENABLE)
+		GUICtrlSetState($editGlobalMessages1, $GUI_ENABLE)
+		GUICtrlSetState($editGlobalMessages2, $GUI_ENABLE)
+		GUICtrlSetState($editGlobalMessages3, $GUI_ENABLE)
+		GUICtrlSetState($editGlobalMessages4, $GUI_ENABLE)		
 	Else
 	$ChatbotChatClan = 0
 		GUICtrlSetState($chkUseResponses, $GUI_DISABLE)
@@ -115,6 +116,10 @@ Func chkClanChat()
 		GUICtrlSetState($chkPbSendNewChats, $GUI_DISABLE)
 		GUICtrlSetState($editResponses, $GUI_DISABLE)
 		GUICtrlSetState($editGeneric, $GUI_DISABLE)
+		GUICtrlSetState($editGlobalMessages1, $GUI_DISABLE)
+		GUICtrlSetState($editGlobalMessages2, $GUI_DISABLE)
+		GUICtrlSetState($editGlobalMessages3, $GUI_DISABLE)
+		GUICtrlSetState($editGlobalMessages4, $GUI_DISABLE)
 	EndIf
 EndFunc ;==>chkClanChat
 
@@ -159,11 +164,19 @@ EndFunc   ;==>chkPbSendNewChats
 ;	For $i = $chkGlobalChat To $editGeneric ; Save state of all controls on tabs
 ;		GUICtrlSetState($i, $GUI_ENABLE)
 ;	Next
-;	ChatGuiCheckboxUpdateAT()
+	
 ;EndFunc   ;==>ChatGuiCheckboxEnableAT
 
 
 Func ChatGuiEditUpdate()
+Global $glb1 = GUICtrlRead($editGlobalMessages1)
+Global $glb2 = GUICtrlRead($editGlobalMessages2)
+Global $glb3 = GUICtrlRead($editGlobalMessages3)
+Global $glb4 = GUICtrlRead($editGlobalMessages4)
+
+Global $cResp = GUICtrlRead($editResponses)
+Global $cGeneric = GUICtrlRead($editGeneric)
+
  $glb1 = GUICtrlRead($editGlobalMessages1)
  $glb2 = GUICtrlRead($editGlobalMessages2)
  $glb3 = GUICtrlRead($editGlobalMessages3)
@@ -180,6 +193,8 @@ Func ChatGuiEditUpdate()
 
 	$cResp = StringReplace($cResp, @CRLF, "|")
 	$cGeneric = StringReplace($cGeneric, @CRLF, "|")
+  
+  ;ChatbotReadSettings()	
   
 ;	; =========================
 EndFunc   ;==>ChatGuiEditUpdate
@@ -253,18 +268,18 @@ Func ChatbotChatSendGlobal() ; click send
 	Return True
 EndFunc   ;==>ChatbotChatSendGlobal
 
-;Func ChatbotStartTimer()
-;	$ChatbotStartTime = TimerInit()
-;EndFunc   ;==>ChatbotStartTimer
+Func ChatbotStartTimer()
+	$ChatbotStartTime = TimerInit()
+EndFunc   ;==>ChatbotStartTimer
 
-;Func ChatbotIsInterval()
- ;   Local $Time_Difference = TimerDiff($ChatbotStartTime)
-;	If $Time_Difference > $ChatbotReadInterval * 1000 Then
-;		Return True
-;	Else
-;		Return False
-;	EndIf
-;EndFunc   ;==>ChatbotIsInterval
+Func ChatbotIsInterval()
+    Local $Time_Difference = TimerDiff($ChatbotStartTime)
+	If $Time_Difference > $ChatbotReadInterval * 1000 Then
+		Return True
+	Else
+		Return False
+	EndIf
+EndFunc   ;==>ChatbotIsInterval
 
 Func ChatbotIsLastChatNew() ; returns true if the last chat was not by you, false otherwise
 	_CaptureRegion()
@@ -462,16 +477,19 @@ EndFunc   ;==>ChangeLanguageToTR
 ; MAIN SCRIPT ==============================================
 
 Func ChatbotMessage() ; run the chatbot
-
-    Local $sendGlobalChat 
-	
 	If $ChatbotChatGlobal Then
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	ElseIf $ChatbotChatClan Then
 		SetLog("Chatbot: Sending some chats", $COLOR_GREEN)
 	EndIf
-	If $ChatbotChatGlobal = 1 And $sendGlobalChat Then
-	   ;$startGlobChatTimer = TimerInit()	
+	If $ChatbotChatGlobal Then
+		;If $chatdelaycount < $ichkchatdelay Then
+		;	SetLog(GetTranslated(106, 39, "Delaying Chat ") & ($ichkchatdelay - $chatdelaycount) & GetTranslated(106, 40, " more times"), $COLOR_GREEN)
+		;	$chatdelaycount += 1
+		;	Return
+		;ElseIf $chatdelaycount = $ichkchatdelay Then
+		;	$chatdelaycount = 0
+		;EndIf
 ;========================Kychera modified==========================================
 		If $ChatbotSwitchLang = 1 Then
 		Switch GUICtrlRead($cmbLang)
@@ -493,10 +511,10 @@ Func ChatbotMessage() ; run the chatbot
 		    ChangeLanguageToTR()
 		        Case "RU"
 		    ChangeLanguageToRU()
-              EndSwitch
 			Sleep(3000)  
+              EndSwitch
+			Sleep(3000) 
 			waitMainScreen()
-			Sleep(3000)
 		EndIf
 ;======================================================================================
 		If Not ChatbotChatOpen() Then Return
@@ -586,7 +604,7 @@ Func ChatbotMessage() ; run the chatbot
 				For $a = 0 To UBound($ClanResponses) - 1
 					If StringInStr($ChatMsg, $ClanResponses[$a][0]) Then
 						Local $Response = $ClanResponses[$a][1]
-						SetLog("Sending response: ") & $Response, $COLOR_GREEN)
+						SetLog("Sending response: " & $Response, $COLOR_GREEN)
 						If Not ChatbotChatClanInput() Then Return
 						If Not ChatbotChatInput($Response) Then Return
 						If Not ChatbotChatSendClan() Then Return

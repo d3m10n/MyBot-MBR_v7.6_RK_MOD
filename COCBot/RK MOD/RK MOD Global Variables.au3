@@ -156,6 +156,3 @@ Global $cResp
 Global $cGeneric
 Global $ChatbotStartTime
 Global $message = ""
-Global $globChatTimeDalay 
-Global $iTxtGlobChatTimeDalay = 0
-Global $startGlobChatTimer = TimerInit()

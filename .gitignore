@@ -115,6 +115,7 @@
 ![Ii]mgxml/Resources/RKBuildersBase/Laboratory/*/*.png
 ![Ii]mgxml/ArmySpells/*.png
 ![Ii]mgxml/Clouds/*.png
+![Ii]mgxml/Chat/*.png
 
 ![C]OCBot/Forecast/*/*.exe
 # ignore test strategies

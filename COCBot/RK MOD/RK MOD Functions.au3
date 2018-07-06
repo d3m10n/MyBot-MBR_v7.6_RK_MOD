@@ -27,7 +27,6 @@
 #include "RK Auto update camps.au3" ; (#ID135-)
 #include "RK Check Stop For War\CheckStopForWar.au3"
 
-#include "RK Chatbot\Chatbot.au3"
 #include "RK Switch Profiles.au3"
 
 ; Bot Humanization
@@ -39,5 +38,12 @@
 #include "RK Bot Humanization\ClanWarActions.au3"
 
 ;#include "RK DoubleTrain\RK Double Train.au3"
+
+; getOcr
+#include "RK OCR\getMyOcr.au3"
+
+; Chat
+#include "RK Chatbot\Chatbot.au3"
+#include "RK Chatbot\ChatFunc.au3"
 
 #include "RK Config.au3"

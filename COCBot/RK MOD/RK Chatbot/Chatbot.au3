@@ -563,13 +563,14 @@ Func ChatbotMessage() ; run the chatbot
 			Return
 		EndIf
 
-		If ChatbotIsLastChatNew() Then
+		If 1 Then
+		;If ChatbotIsLastChatNew() Then
 			; get text of the latest message
-			Local $ChatMsg = StringStripWS(getOcrAndCapture("coc-latinA", 30, 148, 270, 13, False), 7)
-			SetLog("Found chat message: ") & $ChatMsg, $COLOR_GREEN)
+			;Local $ChatMsg = StringStripWS(getOcrAndCapture("coc-latinA", 30, 148, 270, 13, False), 7)
+			;SetLog("Found chat message: " & $ChatMsg, $COLOR_GREEN)
 			Local $SentMessage = False
 
-			If $ChatMsg = "" Or $ChatMsg = " " Then
+				If ReadChat("") Or ReadChat(" ") Then
 				If $ChatbotClanAlwaysMsg Then
 					If Not ChatbotChatClanInput() Then Return
 					If Not ChatbotChatInput($ClanMessages[Random(0, UBound($ClanMessages) - 1, 1)]) Then Return
@@ -580,7 +581,8 @@ Func ChatbotMessage() ; run the chatbot
 
 			If $ChatbotClanUseResponses And Not $SentMessage Then
 				For $a = 0 To UBound($ClanResponses) - 1
-					If StringInStr($ChatMsg, $ClanResponses[$a][0]) Then
+				If ReadChat($ClanResponses[$a][0]) Then
+					;If StringInStr($ChatMsg, $ClanResponses[$a][0]) Then
 						Local $Response = $ClanResponses[$a][1]
 						SetLog("Sending response: " & $Response, $COLOR_GREEN)
 						If Not ChatbotChatClanInput() Then Return

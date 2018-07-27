@@ -42,8 +42,32 @@
 ; getOcr
 #include "RK OCR\getMyOcr.au3"
 
+
 ; Chat
 #include "RK Chatbot\Chatbot.au3"
 #include "RK Chatbot\ChatFunc.au3"
+#include "RK Chatbot\Multy Lang.au3"
+
+; Boost for Magic Spell
+#include "RK Boost for Magic Spell\RK Boost for Magic Spell.au3"
+#include "RK Boost for Magic Spell\RK BoostAllWithMagicSpell.au3"
+
+; Multi Fingers Vectors - (LunaEclipse) - Added by RK MOD
+#include "RK Multi Fingers\Vectors\4FingerStandard.au3"
+#include "RK Multi Fingers\Vectors\4FingerSpiralLeft.au3"
+#include "RK Multi Fingers\Vectors\4FingerSpiralRight.au3"
+#include "RK Multi Fingers\Vectors\8FingerPinWheelLeft.au3"
+#include "RK Multi Fingers\Vectors\8FingerPinWheelRight.au3"
+#include "RK Multi Fingers\Vectors\8FingerBlossom.au3"
+#include "RK Multi Fingers\Vectors\8FingerImplosion.au3"
+; Multi Fingers Profile - (LunaEclipse) - Added by RK MOD
+#include "RK Multi Fingers\4Fingers.au3"
+#include "RK Multi Fingers\8Fingers.au3"
+#include "RK Multi Fingers\MultiFinger.au3"
+#include "RK Multi Fingers\UnitInfo.au3"
+
+#include "RK Check Warden Mode.au3"
+
+#include "RK UpgradesMgmt.au3"
 
 #include "RK Config.au3"

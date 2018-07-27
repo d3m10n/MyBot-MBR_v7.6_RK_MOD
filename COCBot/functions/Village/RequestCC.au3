@@ -15,11 +15,33 @@
 
 Func RequestCC($ClickPAtEnd = True, $specifyText = "")
 
-	If Not $g_bRequestTroopsEnable Or Not $g_bCanRequestCC Or Not $g_bDonationEnabled Then
+	; Request troops for defense Add RK MOD
+	Local $bRequestDefense = False
+	If $g_bRequestTroopsEnableDefense And $g_bCanRequestCC Then
+		Local $bRequestDefenseEarly = False
+		If $g_asShieldStatus[0] = "shield" Then
+			If _DateIsValid($g_asShieldStatus[2]) Then
+				Local $iTimeTillShieldExpireMin = Int(_DateDiff('n', _NowCalc(), $g_asShieldStatus[2])) ; time in minutes
+				SetDebugLog("Shield expires in: " & $iTimeTillShieldExpireMin & " Minutes")
+				$bRequestDefenseEarly = ($iTimeTillShieldExpireMin <= $g_iRequestDefenseEarly)
+			EndIf
+		EndIf
+		$bRequestDefense = $g_asShieldStatus[0] = "guard" Or $g_asShieldStatus[0] = "none" Or $bRequestDefenseEarly
+		If $bRequestDefense Then
+			SetLog(($bRequestDefenseEarly ? "Shield is about to expire!" : "No shield!") & " Request troops for defense", $COLOR_INFO)
+			$g_sRequestTroopsText = $g_sRequestTroopsTextDefense
+			SetDebugLog("$g_sRequestTroopsText is now: " & $g_sRequestTroopsText)
+		Else
+			$g_sRequestTroopsText = IniRead($g_sProfileConfigPath, "donate", "txtRequest", "")
+			SetDebugLog("Reload $g_sRequestTroopsText: " & $g_sRequestTroopsText)
+		EndIf
+	EndIf
+
+	If (Not $g_bRequestTroopsEnable Or Not $g_bCanRequestCC Or Not $g_bDonationEnabled) And Not $bRequestDefense Then
 		Return
 	EndIf
 
-	If $g_bRequestTroopsEnable Then
+	If $g_bRequestTroopsEnable And Not $bRequestDefense Then
 		Local $hour = StringSplit(_NowTime(4), ":", $STR_NOCOUNT)
 		If $g_abRequestCCHours[$hour[0]] = False Then
 			SetLog("Request Clan Castle troops not planned, Skipped..", $COLOR_ACTION)
@@ -30,7 +52,7 @@ Func RequestCC($ClickPAtEnd = True, $specifyText = "")
 	SetLog("Requesting Clan Castle Troops", $COLOR_INFO)
 
 	;open army overview
-	If IsMainPage() Then
+	If IsMainPage(5) Then
 		If Not $g_bUseRandomClick Then
 			Click($aArmyTrainButton[0], $aArmyTrainButton[1], 1, 0, "#0334")
 		Else
@@ -43,7 +65,7 @@ Func RequestCC($ClickPAtEnd = True, $specifyText = "")
 
 	;wait to see army overview
 	Local $iCount = 0
-	While IsTrainPage() = False
+	While IsTrainPage(False, 2) = False
 		If _Sleep($DELAYREQUESTCC1) Then ExitLoop
 		$iCount += 1
 		If $iCount > 5 Then
@@ -52,8 +74,8 @@ Func RequestCC($ClickPAtEnd = True, $specifyText = "")
 		EndIf
 	WEnd
 
-	Local $color1 = _GetPixelColor($aRequestTroopsAO[0], $aRequestTroopsAO[1] + 20, True)	; Gray/Green color at 20px below Letter "R"
-	Local $color2 = _GetPixelColor($aRequestTroopsAO[0], $aRequestTroopsAO[1], True)		; White/Green color at Letter "R"
+	Local $color1 = _GetPixelColor($aRequestTroopsAO[0], $aRequestTroopsAO[1] + 20, True) ; Gray/Green color at 20px below Letter "R"
+	Local $color2 = _GetPixelColor($aRequestTroopsAO[0], $aRequestTroopsAO[1], True) ; White/Green color at Letter "R"
 
 	If _ColorCheck($color1, Hex($aRequestTroopsAO[2], 6), $aRequestTroopsAO[5]) Then
 		;clan full or not in clan
@@ -62,7 +84,7 @@ Func RequestCC($ClickPAtEnd = True, $specifyText = "")
 	ElseIf _ColorCheck($color1, Hex($aRequestTroopsAO[3], 6), $aRequestTroopsAO[5]) Then
 		If _ColorCheck($color2, Hex($aRequestTroopsAO[4], 6), $aRequestTroopsAO[5]) Then
 			;can make a request
-			; Skip request CC - Team AiO MOD++
+			; Skip request CC - Add RK MOD
 			Local $bNeedRequestCC = False
 			If $g_bSkipRequestCC Then
 				Local $aiSkipRequestCC[2] = [Number($g_iSkipRequestCCTroop), Number($g_iSkipRequestCCSpell)]
@@ -113,14 +135,14 @@ Func _makerequest()
 	Click($aRequestTroopsAO[0], $aRequestTroopsAO[1], 1, 0, "0336") ;Select text for request
 
 	;wait window
-	Local $icount = 0
+	Local $iCount = 0
 	While Not ( _ColorCheck(_GetPixelColor($aCancRequestCCBtn[0], $aCancRequestCCBtn[1], True), Hex($aCancRequestCCBtn[2], 6), $aCancRequestCCBtn[3]))
 		If _Sleep($DELAYMAKEREQUEST1) Then ExitLoop
-		$icount += 1
-		If $g_bDebugSetlog Then SetDebugLog("$icount2 = " & $icount & ", " & _GetPixelColor($aCancRequestCCBtn[0], $aCancRequestCCBtn[1], True), $COLOR_DEBUG)
-		If $icount > 20 Then ExitLoop ; wait 21*500ms = 10.5 seconds max
+		$iCount += 1
+		If $g_bDebugSetlog Then SetDebugLog("$icount2 = " & $iCount & ", " & _GetPixelColor($aCancRequestCCBtn[0], $aCancRequestCCBtn[1], True), $COLOR_DEBUG)
+		If $iCount > 20 Then ExitLoop ; wait 21*500ms = 10.5 seconds max
 	WEnd
-	If $icount > 20 Then
+	If $iCount > 20 Then
 		SetLog("Request has already been made, or request window not available", $COLOR_ERROR)
 		ClickP($aAway, 2, 0, "#0257")
 		If _Sleep($DELAYMAKEREQUEST2) Then Return
@@ -131,26 +153,42 @@ Func _makerequest()
 			AndroidSendText($g_sRequestTroopsText, True)
 			Click($atxtRequestCCBtn[0], $atxtRequestCCBtn[1], 1, 0, "#0254") ;Select text for request $atxtRequestCCBtn[2] = [430, 140]
 			_Sleep($DELAYMAKEREQUEST2)
+			; Russian Request- by RK MOD
+			If $g_iChkRusLang2 = 1 Then
+	        SetLog("Request in russian", $COLOR_BLUE)
+            AutoItWinSetTitle('MyAutoItTitle')
+            _WinAPI_SetKeyboardLayout(WinGetHandle(AutoItWinGetTitle()), 0x0419)
+	        Sleep(200)
+	        ControlFocus($g_hAndroidWindow, "", "")
+	        Sleep(200)
+	        SendKeepActive($g_hAndroidWindow)
+	        AutoItSetOption( "SendKeyDelay", 50)
+	        If _SendExEx($g_sRequestTroopsText) = 0 Then
+	            Setlog(" Request text entry failed, try again", $COLOR_ERROR)
+				  Return
+		    EndIf
+            Else
 			If SendText($g_sRequestTroopsText) = 0 Then
 				SetLog(" Request text entry failed, try again", $COLOR_ERROR)
 				Return
 			EndIf
 		EndIf
+		; Russian Request- by RK MOD
 		If _Sleep($DELAYMAKEREQUEST2) Then Return ; wait time for text request to complete
-		$icount = 0
+		$iCount = 0
 		While Not _ColorCheck(_GetPixelColor($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], True), Hex(0x5fac10, 6), 20)
 			If _Sleep($DELAYMAKEREQUEST1) Then ExitLoop
-			$icount += 1
-			If $g_bDebugSetlog Then SetDebugLog("$icount3 = " & $icount & ", " & _GetPixelColor($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], True), $COLOR_DEBUG)
-			If $icount > 25 Then ExitLoop ; wait 26*500ms = 13 seconds max
+			$iCount += 1
+			If $g_bDebugSetlog Then SetDebugLog("$icount3 = " & $iCount & ", " & _GetPixelColor($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], True), $COLOR_DEBUG)
+			If $iCount > 25 Then ExitLoop ; wait 26*500ms = 13 seconds max
 		WEnd
-		If $icount > 25 Then
+		If $iCount > 25 Then
 			If $g_bDebugSetlog Then SetDebugLog("Send request button not found", $COLOR_DEBUG)
 			CheckMainScreen(False) ;emergency exit
 		EndIf
 		If $g_bChkBackgroundMode = False And $g_bNoFocusTampering = False Then ControlFocus($g_hAndroidWindow, "", "") ; make sure Android has window focus
 		Click($aSendRequestCCBtn[0], $aSendRequestCCBtn[1], 1, 100, "#0256") ; click send button
 		$g_bCanRequestCC = False
-	EndIf
-
+	    EndIf
+     EndIf
 EndFunc   ;==>_makerequest

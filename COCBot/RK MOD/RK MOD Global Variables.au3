@@ -17,13 +17,13 @@ Global $g_sLastModversion = "" ;latest version from GIT
 Global $g_sLastModmessage = "" ;message for last version
 Global $g_sOldModversmessage = "" ;warning message for old bot
 
-; ================================================== CSV SPEED PART - Added by RK MOD =========================================== ;
+; ================================================== CSV SPEED - Added by RK MOD =========================================== ;
 
 Global $cmbCSVSpeed[2] = [$LB, $DB]
 Global $icmbCSVSpeed[2] = [2, 2]
 Global $g_CSVSpeedDivider = 1
 
-; ================================================== Goblin XP PART - Added by RK MOD =========================================== ;
+; ================================================== Goblin XP - Added by RK MOD =========================================== ;
 
 ;SuperXP / GoblinXP
 Global $ichkEnableSuperXP = 0, $irbSXTraining = 1, $ichkSXBK = 0, $ichkSXAQ = 0, $ichkSXGW = 0, $iStartXP = 0, $iCurrentXP = 0, $iGainedXP = 0, $iGainedXPHour = 0, $itxtMaxXPtoGain = 500
@@ -37,7 +37,7 @@ Global $g_ActivatedHeroes[3] = [False, False, False] ; [0] = Queen, [1] = Warden
 Global Const $g_minStarsToEnd = 1
 Global $g_canGainXP = False
 
-; ================================================ Forecast - (modification by rulesss,kychera) - Added by rulesss =============== ;
+; ================================================ Forecast - by RK MOD =============== ;
 Global Const $COLOR_DEEPPINK = 0xFF1493
 Global Const $COLOR_DARKGREEN = 0x006400
 Global $oIE = ObjCreate("Shell.Explorer.2")
@@ -63,7 +63,7 @@ Global $cmbSwLang = 0
 
 Global $g_bSkipRequestCC, $g_iSkipRequestCCTroop, $g_iSkipRequestCCSpell 
 
-; ================================================ move the Request CC Troops - Added by RK MOD ======================================== ;
+; ================================================ First Request CC Troops - Added by RK MOD ======================================== ;
 
 Global $g_bReqCCFirst = False
 
@@ -86,7 +86,7 @@ Global Const $g_sImgSCIDOr =		@ScriptDir & "\RK MOD\RK AF_SCID\Images\ImgMIS\Or"
 
 Global $g_bChkAltuFaltuSCID = False        
 
-; ================================================ AutoCamp - Added by RK MOD ======================================== ;
+; ================================================ AutoCamp - by RK MOD ======================================== ;
 
 Global $g_iChkAutoCamp = 0
 
@@ -132,7 +132,11 @@ Global $ichkElixirSwitchMax, $itxtMaxElixirAmount, $icmbElixirMaxProfile, $ichkE
 Global $ichkDESwitchMax, $itxtMaxDEAmount, $icmbDEMaxProfile, $ichkDESwitchMin, $itxtMinDEAmount, $icmbDEMinProfile
 Global $ichkTrophySwitchMax, $itxtMaxTrophyAmount, $icmbTrophyMaxProfile, $ichkTrophySwitchMin, $itxtMinTrophyAmount, $icmbTrophyMinProfile
 
-; ================================================ Chatbot - Added by RK MOD ======================================== ;
+; ========================= Slot11 - Added by RK MOD (ID193-) =============================================================================================;
+
+Global $g_iTotalAttackSlot = 10, $g_bDraggedAttackBar = False ; flag if AttackBar is dragged or not
+
+; ================================================ NEW ChatBot - by RK MOD ======================================== ;
 Global $ChatbotChatGlobal = 0
 Global $ChatbotScrambleGlobal = 0
 Global $ChatbotSwitchLang = 0
@@ -141,18 +145,61 @@ Global $ChatbotClanUseResponses = 0
 Global $ChatbotClanAlwaysMsg = 0
 Global $ChatbotUseNotify = 0
 Global $ChatbotPbSendNew = 0
+Global $g_iChkRusLang = 0
 Global $ClanMessages = ""
 Global $ClanResponses = ""
 Global $ClanResponses0
 Global $GlobalMessages1 = ""
 Global $GlobalMessages2 = ""
-Global $GlobalMessages3 = ""
-Global $GlobalMessages4 = ""
 Global $glb1 
 Global $glb2
-Global $glb3
-Global $glb4
 Global $cResp
 Global $cGeneric
 Global $ChatbotStartTime
 Global $message = ""
+
+;=============================================== Russian Request - by RK MOD ======================================== ;
+
+Global $g_iChkRusLang2 = 0
+
+;=============================================== Max logout time - by RK MOD ======================================== ;
+
+Global $g_bTrainLogoutMaxTime = False, $g_iTrainLogoutMaxTime = 4
+
+;=============================================== Request troops for defense - by RK MOD ============================== ;
+
+Global $g_bRequestTroopsEnableDefense, $g_sRequestTroopsTextDefense, $g_iRequestDefenseEarly 
+
+; ================================================== Boost for Magic Spell by RK MOD ================================= ;
+
+Global $g_iChkBoostBMagic = 0, $g_iCmbBoostBrMagic = 0, $g_iChkBoostCMagic = 0, $g_iCmbBoostClMagic = 0  
+Global $g_iXCollect = 0, $g_iYCollect = 0, $g_bCanBoostC = False
+Global $g_iLastTime[3] = [0, 0, 0]
+
+; ================================================== Multi Finger - Added by RK MOD ======================================== ;
+
+Global Enum $directionLeft, $directionRight
+Global Enum $sideBottomRight, $sideTopLeft, $sideBottomLeft, $sideTopRight
+Global Enum $mfRandom, $mfFFStandard, $mfFFSpiralLeft, $mfFFSpiralRight, $mf8FBlossom, $mf8FImplosion, $mf8FPinWheelLeft, $mf8FPinWheelRight
+
+Global $g_iMultiFingerStyle = 1
+Global Enum $eCCSpell = $eHaSpell + 1
+
+; ================================================== Unit/Wave Factor  - Added by RK MOD ======================================== ;
+
+Global $g_iChkUnitFactor = 0
+Global $g_iTxtUnitFactor = 10
+Global $g_iChkWaveFactor = 0
+Global $g_iTxtWaveFactor = 100
+
+; ================================================== Check Grand Warden Mode - Added by RK MOD ================================== ;
+
+Global $g_bCheckWardenMode = False, $g_iCheckWardenMode = 0
+
+; ================================================== Upgrade Management - Added by RK MOD ================================== ;
+
+Global $g_ibUpdateNewUpgradesOnly = False
+Global Const $UP = True, $DOWN = False, $TILL_END = True
+
+; ================================================== Fill - Added by RK MOD ================================== ;
+Global $g_iSpaceForTroopsFill = 0

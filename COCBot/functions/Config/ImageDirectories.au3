@@ -29,7 +29,7 @@ Global Const $g_sImgOutOfSync = @ScriptDir & "\imgxml\other\Oos[[Android]]*"
 #Region Main Village
 Global $g_sImgCollectRessources = @ScriptDir & "\imgxml\Resources\Collect"
 Global $g_sImgCollectLootCart = @ScriptDir & "\imgxml\Resources\LootCart\LootCart_0_85.xml"
-Global $g_sImgRearm = @ScriptDir & "\imgxml\rearm\"
+Global $g_sImgRearm = @ScriptDir & "\imgxml\rearm"
 Global $g_sImgBoat = @ScriptDir & "\imgxml\Boat\BoatNormalVillage_0_89.xml"
 Global $g_sImgZoomOutDir = @ScriptDir & "\imgxml\village\NormalVillage\"
 Global $g_sImgCheckWallDir = @ScriptDir & "\imgxml\Walls"
@@ -88,7 +88,7 @@ Global $g_sImgArmyOverviewSpells = @ScriptDir & "\imgxml\ArmyOverview\Spells" ; 
 
 #Region Attack
 Global $g_sImgAttackBarDir = @ScriptDir & "\imgxml\AttackBar"
-Global $g_sImgSwitchSiegeMacines = @ScriptDir & "\imgxml\SwitchSiegeMachines\Siege"
+Global $g_sImgSwitchSiegeMachine = @ScriptDir & "\imgxml\SwitchSiegeMachines\Siege"
 Global $g_sImgSwitchSiegeCastle = @ScriptDir & "\imgxml\SwitchSiegeMachines\Castle"
 #EndRegion
 
@@ -110,9 +110,17 @@ Global $g_sImgEasyBuildings = @ScriptDir & "\imgxml\easybuildings"
 #EndRegion
 
 #Region SwitchAcc
-Global Const $g_sImgLoginWithSupercellID = @ScriptDir & "\imgxml\other\LoginWithSupercellID*"
-Global Const $g_sImgGoogleSelectAccount = @ScriptDir & "\imgxml\other\GoogleSelectAccount*"
-Global Const $g_sImgGoogleSelectEmail = @ScriptDir & "\imgxml\other\GoogleSelectEmail*"
+Global Const $g_sImgLoginWithSupercellID = @ScriptDir & "\imgxml\other\SwitchAccounts\LoginWithSupercellID*"
+Global Const $g_sImgGoogleSelectAccount = @ScriptDir & "\imgxml\other\SwitchAccounts\GoogleSelectAccount*"
+Global Const $g_sImgGoogleSelectEmail = @ScriptDir & "\imgxml\other\SwitchAccounts\GoogleSelectEmail*"
+Global Const $g_sImgLogOutButton = @ScriptDir & "\imgxml\other\SwitchAccounts\LogOutButton"
+Global Const $g_sImgConfirmButton = @ScriptDir & "\imgxml\other\SwitchAccounts\ConfirmButton"
+Global Const $g_sImgListAccounts = @ScriptDir & "\imgxml\other\SwitchAccounts\ListAccounts"
+#EndRegion
+
+#Region Grand Warden Mode
+Global $g_sImgGrandWardenHeal = @ScriptDir & "\imgxml\other\GrandWardenMode\GrandWardenHeal"
+Global $g_sImgGrandWardenMode = @ScriptDir & "\imgxml\other\GrandWardenMode\GrandWardenAir"
 #EndRegion
 
 #Region ClanGames
@@ -192,6 +200,7 @@ Global Const $g_sImgBall = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\
 Global Const $g_sImgDrag = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\Air Troop Challenges\Drag"
 Global Const $g_sImgLava = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\Air Troop Challenges\Lava"
 Global Const $g_sImgMini = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\Air Troop Challenges\Mini"
+Global Const $g_sImgEdrag = 		@ScriptDir & "\imgxml\Resources\Clan Games Images\Air Troop Challenges\EDrag"
 
 Global Const $g_sImgGard = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\Miscellaneous Challenges\Gardening Exercise"
 Global Const $g_sImgDonS = 			@ScriptDir & "\imgxml\Resources\Clan Games Images\Miscellaneous Challenges\Donate Spells"

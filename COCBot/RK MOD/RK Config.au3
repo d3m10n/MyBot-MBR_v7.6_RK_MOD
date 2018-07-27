@@ -15,12 +15,12 @@
 
 Func ReadConfig_RKMod()
 
-	; ================================================== CSV SPEED PART - Added by RK MOD ================================ ;
+	; ================================================== CSV SPEED  - Added by RK MOD ================================ ;
 
 	IniReadS($icmbCSVSpeed[$LB], $g_sProfileConfigPath, "RK CSV Speed", "cmbCSVSpeed[LB]", 2, "Int")
 	IniReadS($icmbCSVSpeed[$DB], $g_sProfileConfigPath, "RK CSV Speed", "cmbCSVSpeed[DB]", 2, "Int")
 
-; ================================================== Super XP PART - Added by RK MOD ==================================== ;
+; ================================================== Super XP - Added by RK MOD ==================================== ;
 
 	IniReadS($ichkEnableSuperXP, $g_sProfileConfigPath, "RK GoblinXP", "EnableSuperXP", 0, "int")
 	IniReadS($irbSXTraining, $g_sProfileConfigPath, "RK GoblinXP", "SXTraining", 1, "int")
@@ -29,7 +29,7 @@ Func ReadConfig_RKMod()
 	IniReadS($ichkSXAQ, $g_sProfileConfigPath, "RK GoblinXP", "SXAQ", $eHeroNone)
     IniReadS($ichkSXGW, $g_sProfileConfigPath, "RK GoblinXP", "SXGW", $eHeroNone)
      
-	;================================================== Forecast PART - Added by RK MOD ================================= ;
+	;================================================== Forecast - by RK MOD ================================= ;
 	
 	IniReadS($iChkForecastBoost, $g_sProfileConfigPath, "RK Forecast", "chkForecastBoost", 0, "Int")
 	IniReadS($iChkForecastPause, $g_sProfileConfigPath, "RK Forecast", "chkForecastPause", 0, "Int")
@@ -53,7 +53,7 @@ Func ReadConfig_RKMod()
 	
 	IniReadS($g_bReqCCFirst, $g_sProfileConfigPath, "planned", "ReqCCFirst", $g_bReqCCFirst, "Bool")
 	
-	; ================================================ AutoCamp - Added by RK MOD (#ID135-) ======================================== 
+	; ================================================ AutoCamp - by RK MOD (#ID135-) ======================================== 
 	
 	IniReadS($g_iChkAutoCamp, $g_sProfileConfigPath, "troop", "ChkAutoCamp", $g_iChkAutoCamp, "Int")
 	
@@ -135,7 +135,7 @@ Func ReadConfig_RKMod()
 	IniReadS($icmbTrophyMinProfile, $g_sProfileConfigPath, "profiles", "cmbTrophyMinProfile", 0, "int")
 	IniReadS($itxtMinTrophyAmount, $g_sProfileConfigPath, "profiles", "txtMinTrophyAmount", 1000, "int")
 	
-	; ================================================== ChatBOT - Added by RK MOD ================================= ;
+	; ================================================== NEW ChatBot - by RK MOD ================================= ;
 	
 	IniReadS($ChatbotChatGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalChat", $ChatbotChatGlobal, "Int")
 	IniReadS($ChatbotScrambleGlobal, $g_sProfileConfigPath, "Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal, "Int")
@@ -146,10 +146,51 @@ Func ReadConfig_RKMod()
 	IniReadS($ChatbotClanAlwaysMsg, $g_sProfileConfigPath, "Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg, "Int")
 	IniReadS($ChatbotUseNotify, $g_sProfileConfigPath, "Chatbot", "chkChatNotify", $ChatbotUseNotify, "Int")
 	IniReadS($ChatbotPbSendNew, $g_sProfileConfigPath, "Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew, "Int")	
-	$editGlobalMessages1 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg1", "War Clan Recruiting|Active War Clan accepting applications")
-	$editGlobalMessages2 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg2", "Join now|Apply now")
-	$editGlobalMessages3 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg3", "250 war stars min|Must have 250 war stars")
-	$editGlobalMessages4 = IniRead($g_sProfileConfigPath, "Chatbot", "globalMsg4", "Adults Only| 18+")
+	IniReadS($g_iChkRusLang, $g_sProfileConfigPath, "Chatbot", "ChkRusLang", $g_iChkRusLang, "Int")
+	
+	; ================================================== Russian Request - by RK MOD ================================= ;
+	
+	IniReadS($g_iChkRusLang2, $g_sProfileConfigPath, "Lang", "ChkRusLang2", $g_iChkRusLang2, "Int")
+	
+	; ================================================== Max logout time by RK MOD ================================= ;
+	
+	IniReadS($g_bTrainLogoutMaxTime, $g_sProfileConfigPath, "TrainLogout", "TrainLogoutMaxTime", $g_bTrainLogoutMaxTime, "Bool")
+	IniReadS($g_iTrainLogoutMaxTime, $g_sProfileConfigPath, "TrainLogout", "TrainLogoutMaxTimeTXT", $g_iTrainLogoutMaxTime, "int")
+	
+	; ================================================== Request troops for defense by RK MOD ================================= ;
+	
+	$g_bRequestTroopsEnableDefense = (IniRead($g_sProfileConfigPath, "RequestDefense", "RequestDefenseEnable", "0") = "1")
+	$g_sRequestTroopsTextDefense = IniRead($g_sProfileConfigPath, "RequestDefense", "txtRequestDefense", "")
+	$g_iRequestDefenseEarly = Int(IniRead($g_sProfileConfigPath, "RequestDefense", "RequestDefenseEarly", "0"))
+	
+	; ================================================== Boost for Magic Spell by RK MOD ================================= ;
+	
+	IniReadS($g_iChkBoostBMagic, $g_sProfileConfigPath, "boost", "chkBoostBMagic", $g_iChkBoostBMagic, "Int")
+	IniReadS($g_iCmbBoostBrMagic, $g_sProfileConfigPath, "boost", "CmbBoostBrMagic", 1, "int")
+    IniReadS($g_iChkBoostCMagic, $g_sProfileConfigPath, "boost", "chkBoostCMagic", $g_iChkBoostCMagic, "Int")
+	IniReadS($g_iCmbBoostClMagic, $g_sProfileConfigPath, "boost", "CmbBoostClMagic", 1, "int")
+	For $i = 0 To 2
+		IniReadS($g_iLastTime[$i], $g_sProfileBuildingPath, "other", "LastTimeCollectors" & $i, 0, "int")
+	Next
+
+	; ================================================== Multi Finger - Added by RK MOD ==================== ; 
+	IniReadS($g_iMultiFingerStyle, $g_sProfileConfigPath, "MultiFinger", "Select", 2, "int")
+   
+   
+	; ================================================== Unit/Wave Factor - Added by RK MOD ==================== ;
+	IniReadS($g_iChkUnitFactor, $g_sProfileConfigPath, "SetSleep", "EnableUnitFactor", 0, "Int")
+	IniReadS($g_iTxtUnitFactor, $g_sProfileConfigPath, "SetSleep", "UnitFactor", 10 ,"Int")
+	IniReadS($g_iChkWaveFactor, $g_sProfileConfigPath, "SetSleep", "EnableWaveFactor", 0, "Int")
+	IniReadS($g_iTxtWaveFactor, $g_sProfileConfigPath, "SetSleep", "WaveFactor", 100 ,"Int")
+	
+	; ================================================== Check Grand Warden Mode - Added by RK MOD ==================== ;
+	
+	IniReadS($g_bCheckWardenMode, $g_sProfileConfigPath, "other", "chkCheckWardenMode", False, "Bool")
+	IniReadS($g_iCheckWardenMode, $g_sProfileConfigPath, "other", "cmbCheckWardenMode", 0, "int")
+	
+	; ==================================================  Upgrade Management - Added by RK MOD ==================== ;
+	
+	$g_ibUpdateNewUpgradesOnly = (IniRead($g_sProfileConfigPath, "upgrade", "UpdateNewUpgradesOnly", 0) = 1)
 	
 EndFunc   ;==>ReadConfig_RKMod
 
@@ -157,13 +198,13 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	ApplyConfig_RKMod(GetApplyConfigSaveAction())
 	
 
-	; ================================================== CSV SPEED PART - Added by RK MOD =============================== ;
+	; ================================================== CSV SPEED - Added by RK MOD =============================== ;
 
 
 	_Ini_Add("RK CSV Speed", "cmbCSVSpeed[LB]", $icmbCSVSpeed[$LB])
 	_Ini_Add("RK CSV Speed", "cmbCSVSpeed[DB]", $icmbCSVSpeed[$DB])
 
-	; ================================================== Super XP PART - Added by RK MOD ================================ ;
+	; ================================================== Super XP - Added by RK MOD ================================ ;
 
 	_Ini_Add("RK GoblinXP", "EnableSuperXP", $ichkEnableSuperXP)
 	_Ini_Add("RK GoblinXP", "SXTraining",  $irbSXTraining)
@@ -173,7 +214,7 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	_Ini_Add("RK GoblinXP", "MaxXptoGain", GUICtrlRead($txtMaxXPtoGain))
     
     
-	 ; ================================================== Forecast PART - Added by RK MOD  ============================== ;
+	 ; ================================================== Forecast - by RK MOD  ============================== ;
 	
 	_Ini_Add("RK Forecast", "txtForecastBoost", GUICtrlRead($txtForecastBoost))
 	_Ini_Add("RK Forecast", "txtForecastPause", GUICtrlRead($txtForecastPause))
@@ -197,7 +238,7 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	
 	_Ini_Add("planned", "ReqCCFirst", $g_bReqCCFirst)
 	
-	; ================================================ AutoCamp - Added by RK MOD (#ID135-) ======================================== 
+	; ================================================ AutoCamp - by RK MOD (#ID135-) ======================================== 
     
 	_Ini_Add("troop", "ChkAutoCamp", $g_iChkAutoCamp ? 1 : 0)
 	
@@ -278,7 +319,7 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	_Ini_Add("profiles", "cmbTrophyMinProfile", $icmbTrophyMinProfile)
 	_Ini_Add("profiles", "txtMinTrophyAmount", $itxtMinTrophyAmount)
 	
-	; ================================================== ChatBOT - Added by RK MOD ================================= ;
+	; ================================================== NEW ChatBot - by RK MOD ================================= ;
 	
 	_Ini_Add("Chatbot", "chkGlobalChat", $ChatbotChatGlobal)
 	_Ini_Add("Chatbot", "chkGlobalScramble", $ChatbotScrambleGlobal)
@@ -289,13 +330,57 @@ Func SaveConfig_RKMod()  ; due to mini mode no guitCtrols Reads in this function
 	_Ini_Add("Chatbot", "chkUseGeneric", $ChatbotClanAlwaysMsg)
 	_Ini_Add("Chatbot", "chkChatNotify", $ChatbotUseNotify)
 	_Ini_Add("Chatbot", "chkPbSendNewChats", $ChatbotPbSendNew)   
+    _Ini_Add("Chatbot", "ChkRusLang", $g_iChkRusLang ? 1 : 0)
    
     _Ini_Add("Chatbot", "globalMsg1", $glb1)
 	_Ini_Add("Chatbot", "globalMsg2", $glb2)
-    _Ini_Add("Chatbot", "globalMsg3", $glb3)
-	_Ini_Add("Chatbot", "globalMsg4", $glb4)
 	_Ini_Add("Chatbot", "genericMsgClan", $cGeneric)
 	_Ini_Add("Chatbot", "responseMsgClan", $cResp)	
+	
+	; ================================================== Russian Request - by RK MOD ================================= ;
+	
+	_Ini_Add("Lang", "chkRusLang2", $g_iChkRusLang2 ? 1 : 0)
+	
+	; ================================================== Max logout time - by RK MOD ================================= ;
+	
+	_Ini_Add("TrainLogout", "TrainLogoutMaxTime", $g_bTrainLogoutMaxTime)
+	_Ini_Add("TrainLogout", "TrainLogoutMaxTimeTXT", $g_iTrainLogoutMaxTime)
+	
+	; ================================================== Request troops for defense - by RK MOD ================================= ;
+	
+	_Ini_Add("RequestDefense", "RequestDefenseEnable", $g_bRequestTroopsEnableDefense ? 1 : 0)
+	_Ini_Add("RequestDefense", "txtRequestDefense", $g_sRequestTroopsTextDefense)
+	_Ini_Add("RequestDefense", "RequestDefenseEarly", $g_iRequestDefenseEarly)
+
+	; ================================================== Boost for Magic Spell by RK MOD ================================= ;
+	
+	_Ini_Add("boost", "chkBoostBMagic", $g_iChkBoostBMagic ? 1 : 0)
+	_Ini_Add("boost", "cmbBoostBrMagic", _GUICtrlComboBox_GetCurSel($g_hCmbBoostBrMagic))
+	_Ini_Add("boost", "chkBoostCMagic", $g_iChkBoostCMagic ? 1 : 0)
+	_Ini_Add("boost", "cmbBoostClMagic", _GUICtrlComboBox_GetCurSel($g_hCmbBoostClMagic))
+	For $i = 0 To 2
+			_Ini_Add("boost", "LastTimeCollectors" & $i, $g_iLastTime[0])
+	Next
+
+	; ================================================== Multi Finger - Added by RK MOD ======================================== ;
+	
+	_Ini_Add("MultiFinger", "Select", _GUICtrlComboBox_GetCurSel($g_hcmbDBMultiFinger))
+
+	; ================================================== Unit/Wave Factor - Added by RK MOD ======================================== ;
+	
+	_Ini_Add("SetSleep", "EnableUnitFactor", $g_iChkUnitFactor ? 1 : 0)
+	_Ini_Add("SetSleep", "EnableWaveFactor", $g_iChkWaveFactor ? 1 : 0)
+    _Ini_Add("SetSleep", "UnitFactor", GUICtrlRead($g_hTxtUnitFactor))
+	_Ini_Add("SetSleep", "WaveFactor", GUICtrlRead($g_hTxtWaveFactor))
+	
+	; ================================================== Check Grand Warden Mode - Added by RK MOD ================================== ;
+	
+	_Ini_Add("other", "chkCheckWardenMode", $g_bCheckWardenMode ? 1 : 0)
+	_Ini_Add("other", "cmbCheckWardenMode", $g_iCheckWardenMode)
+	
+	; ================================================== Upgrade Management - Added by RK MOD ================================== ;
+	
+	_Ini_Add("upgrade", "UpdateNewUpgradesOnly", $g_ibUpdateNewUpgradesOnly ? 1 : 0)
 	
 EndFunc   ;==>SaveConfig_RKMod
 
@@ -305,13 +390,13 @@ Func ApplyConfig_RKMod($TypeReadSave)
 
 		Case "Save"
 
-			; ================================================== CSV SPEED PART - Added by RK MOD ========================= ;
+			; ================================================== CSV SPEED - Added by RK MOD ========================= ;
 
 		     $icmbCSVSpeed[$LB] = _GUICtrlComboBox_GetCurSel($cmbCSVSpeed[$LB])
 			 $icmbCSVSpeed[$DB] = _GUICtrlComboBox_GetCurSel($cmbCSVSpeed[$DB])
 
 		
-			; ================================================== Super XP PART - Added by RK MOD ========================== ;
+			; ================================================== Super XP - Added by RK MOD ========================== ;
 
 			$ichkEnableSuperXP = GUICtrlRead($chkEnableSuperXP) = $GUI_CHECKED ? 1 : 0
 			$irbSXTraining = GUICtrlRead($rbSXTraining) = $GUI_CHECKED ? 1 : 2
@@ -320,7 +405,7 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			$ichkSXGW = (GUICtrlRead($chkSXGW) = $GUI_CHECKED) ? $eHeroWarden : $eHeroNone
 			$itxtMaxXPtoGain = Int(GUICtrlRead($txtMaxXPtoGain))
             
-			; ================================================== Forecast PART - Added by RK MOD =========================== ;
+			; ================================================== Forecast - by RK MOD =========================== ;
 			
 			$iChkForecastBoost = GUICtrlRead($chkForecastBoost) = $GUI_CHECKED ? 1 : 0
 			$iTxtForecastBoost = GUICtrlRead($txtForecastBoost)
@@ -345,7 +430,7 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			
 			$g_bReqCCFirst = (GUICtrlRead($g_hChkReqCCFirst) = $GUI_CHECKED)
 			
-			; ================================================ AutoCamp - Added by RK MOD (#ID135-) ======================================== 
+			; ================================================ AutoCamp - by RK MOD (#ID135-) ======================================== 
 			
 			$g_iChkAutoCamp = GUICtrlRead($g_hChkAutoCamp) = $GUI_CHECKED ? 1 : 0
 			
@@ -427,27 +512,68 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			$icmbTrophyMinProfile = _GUICtrlComboBox_GetCurSel($g_hCmbTrophyMinProfile)
 			$itxtMinTrophyAmount = GUICtrlRead($g_hTxtMinTrophyAmount)
 			
-			; ================================================== ChatBOT - Added by RK MOD ================================= ;
+			; ================================================== NEW ChatBot - by RK MOD ================================= ;
 			
-			$ChatbotChatGlobal = GUICtrlRead($chkGlobalChat) = $GUI_CHECKED ? 1 : 0
-			$ChatbotScrambleGlobal = GUICtrlRead($chkGlobalScramble) = $GUI_CHECKED ? 1 : 0
-			$ChatbotSwitchLang = GUICtrlRead($chkSwitchLang) = $GUI_CHECKED ? 1 : 0
+			$ChatbotChatGlobal = GUICtrlRead($g_hChkGlobalChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotScrambleGlobal = GUICtrlRead($g_hChkGlobalScramble) = $GUI_CHECKED ? 1 : 0
+			$ChatbotSwitchLang = GUICtrlRead($g_hChkSwitchLang) = $GUI_CHECKED ? 1 : 0
 			$icmbLang = _GUICtrlComboBox_GetCurSel($cmbLang)
-			$ChatbotChatClan = GUICtrlRead($chkClanChat) = $GUI_CHECKED ? 1 : 0
-			$ChatbotClanUseResponses = GUICtrlRead($chkUseResponses) = $GUI_CHECKED ? 1 : 0
-			$ChatbotClanAlwaysMsg = GUICtrlRead($chkUseGeneric) = $GUI_CHECKED ? 1 : 0
-			$ChatbotUseNotify = GUICtrlRead($chkChatNotify) = $GUI_CHECKED ? 1 : 0
-			$ChatbotPbSendNew = GUICtrlRead($chkPbSendNewChats) = $GUI_CHECKED ? 1 : 0	
+			$ChatbotChatClan = GUICtrlRead($g_hChkClanChat) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanUseResponses = GUICtrlRead($g_hChkUseResponses) = $GUI_CHECKED ? 1 : 0
+			$ChatbotClanAlwaysMsg = GUICtrlRead($g_hChkUseGeneric) = $GUI_CHECKED ? 1 : 0
+			$ChatbotUseNotify = GUICtrlRead($g_hChkChatNotify) = $GUI_CHECKED ? 1 : 0
+			$ChatbotPbSendNew = GUICtrlRead($g_hChkPbSendNewChats) = $GUI_CHECKED ? 1 : 0
+            $g_iChkRusLang = GUICtrlRead($g_hChkRusLang) = $GUI_CHECKED ? 1 : 0			
+			
+			; ================================================== Russian Request - by RK MOD ================================= ;
+			
+			$g_iChkRusLang2 = GUICtrlRead($g_hChkRusLang2) = $GUI_CHECKED ? 1 : 0
+			
+			; ================================================== Max logout time - by RK MOD ================================= ;
+			
+			$g_bTrainLogoutMaxTime = (GUICtrlRead($g_hChkTrainLogoutMaxTime) = $GUI_CHECKED)
+			$g_iTrainLogoutMaxTime = GUICtrlRead($g_hTxtTrainLogoutMaxTime)
+			
+			; ================================================== Request troops for defense - by RK MOD ================================= ;
+			
+			$g_bRequestTroopsEnableDefense = (GUICtrlRead($g_hChkRequestTroopsEnableDefense) = $GUI_CHECKED)
+			$g_sRequestTroopsTextDefense = GUICtrlRead($g_hTxtRequestCCDefense)
+			$g_iRequestDefenseEarly = GUICtrlRead($g_hTxtRequestDefenseEarly)
+			
+			; ================================================== Boost for Magic Spell by RK MOD ================================= ;
+			
+			$g_iChkBoostBMagic = GUICtrlRead($g_hChkBoostBMagic) = $GUI_CHECKED ? 1 : 0
+			$g_iCmbBoostBrMagic = _GUICtrlComboBox_GetCurSel($g_hCmbBoostBrMagic)
+			$g_iChkBoostCMagic = GUICtrlRead($g_hChkBoostCMagic) = $GUI_CHECKED ? 1 : 0
+			$g_iCmbBoostClMagic = _GUICtrlComboBox_GetCurSel($g_hCmbBoostClMagic)
+			
+			; ================================================== Multi Finger - Added by RK MOD ======================================== ;
+			$g_iMultiFingerStyle = _GUICtrlComboBox_GetCurSel($g_hCmbDBMultiFinger)
+			
+			; ================================================== Unit/Wave Factor - Added by RK MOD ======================================== ;
+			$g_iChkUnitFactor = (GUICtrlRead($g_hChkUnitFactor) = $GUI_CHECKED)
+			$g_iChkWaveFactor = (GUICtrlRead($g_hChkWaveFactor) = $GUI_CHECKED)
+			$g_iTxtUnitFactor = GUICtrlRead($g_hTxtUnitFactor)
+			$g_iTxtWaveFactor = GUICtrlRead($g_hTxtWaveFactor)
+			
+			; ================================================== Check Grand Warden Mode - Added by RK MOD ================================= ;
+			
+			$g_bCheckWardenMode = (GUICtrlRead($g_hChkCheckWardenMode) = $GUI_CHECKED)
+			$g_iCheckWardenMode = _GUICtrlComboBox_GetCurSel($g_hCmbCheckWardenMode)
+			
+			; ================================================== Upgrade Management - Added by RK MOD ================================= ;
+			
+			$g_ibUpdateNewUpgradesOnly = (GUICtrlRead($g_hChkUpdateNewUpgradesOnly) = $GUI_CHECKED)
 			
 		Case "Read"
 
 	
-			; ================================================== CSV SPEED PART - Added by RK MOD ============================  ;
+			; ================================================== CSV SPEED - Added by RK MOD ============================  ;
 
 			 _GUICtrlComboBox_SetCurSel($cmbCSVSpeed[$LB], $icmbCSVSpeed[$LB])
 			 _GUICtrlComboBox_SetCurSel($cmbCSVSpeed[$DB], $icmbCSVSpeed[$DB])
 
-			; ================================================== Super XP PART - Added by RK MOD ============================== ;
+			; ================================================== Super XP - Added by RK MOD ============================== ;
 
 			GUICtrlSetState($chkEnableSuperXP, $ichkEnableSuperXP = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
 
@@ -466,7 +592,7 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			cmbStandardDropSidesAB()
 			Bridge()
 			
-			; ================================================== Forecast PART - Added by RK MOD ================================ ;
+			; ================================================== Forecast - by RK MOD ================================ ;
 			
 			GUICtrlSetState($chkForecastBoost, ($iChkForecastBoost = 1) ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetData($txtForecastBoost, $iTxtForecastBoost)
@@ -489,11 +615,11 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			GUICtrlSetState($g_hChkSkipRequestCC, $g_bSkipRequestCC ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetData($g_hTxtSkipRequestCCTroop, $g_iSkipRequestCCTroop)
 			GUICtrlSetData($g_hTxtSkipRequestCCSpell, $g_iSkipRequestCCSpell)
-             
+            chkSkipRequestCC()
 			; ================================================== Move the Request CC Troops - Added by RK MOD ================== ;
 			
 			GUICtrlSetState($g_hChkReqCCFirst, $g_bReqCCFirst = True ? $GUI_CHECKED : $GUI_UNCHECKED)
-			
+			chkReqCCFirst()
 			; ================================================ AutoCamp - Added by RK MOD (#ID135-) ======================================== 
             
 			GUICtrlSetState($g_hChkAutoCamp, $g_iChkAutoCamp = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
@@ -581,17 +707,19 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			_GUICtrlComboBox_SetCurSel($g_hCmbTrophyMinProfile, $icmbTrophyMinProfile)
 			GUICtrlSetData($g_hTxtMinTrophyAmount, $itxtMinTrophyAmount)
 			
-			; ================================================== ChatBOT - Added by RK MOD ======================================== ;
+			; ================================================== NEW ChatBot - by RK MOD ======================================== ;
 			
-			GUICtrlSetState($chkGlobalChat, $ChatbotChatGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkGlobalScramble, $ChatbotScrambleGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkSwitchLang, $ChatbotSwitchLang = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)			
+			GUICtrlSetState($g_hChkGlobalChat, $ChatbotChatGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkGlobalScramble, $ChatbotScrambleGlobal = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkSwitchLang, $ChatbotSwitchLang = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)			
 			_GUICtrlComboBox_SetCurSel($cmbLang, $icmbLang)
-			GUICtrlSetState($chkClanChat, $ChatbotChatClan = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkUseResponses, $ChatbotClanUseResponses = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkUseGeneric, $ChatbotClanAlwaysMsg = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkChatNotify, $ChatbotUseNotify = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
-			GUICtrlSetState($chkPbSendNewChats, $ChatbotPbSendNew = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkClanChat, $ChatbotChatClan = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkUseResponses, $ChatbotClanUseResponses = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkUseGeneric, $ChatbotClanAlwaysMsg = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkChatNotify, $ChatbotUseNotify = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkPbSendNewChats, $ChatbotPbSendNew = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetState($g_hChkRusLang, $g_iChkRusLang = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+   		    chkRusLang()
 			chkGlobalChat()
 			chkGlobalScramble()
 			chkSwitchLang()
@@ -601,6 +729,57 @@ Func ApplyConfig_RKMod($TypeReadSave)
 			chkChatNotify()
 			chkPbSendNewChats()		
 			ChatGuiEditUpdate()
+			
+			; ================================================== Russian Request - by RK MOD ======================================== ;
+			
+			GUICtrlSetState($g_hChkRusLang2, $g_iChkRusLang2 = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+   		    chkRusLang2()
+			; ================================================== Max logout time - by RK MOD ======================================== ;
+			
+			GUICtrlSetState($g_hChkTrainLogoutMaxTime, $g_bTrainLogoutMaxTime = True ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkTrainLogoutMaxTime()
+			GUICtrlSetData($g_hTxtTrainLogoutMaxTime, $g_iTrainLogoutMaxTime)
+			
+			; ================================================== Request troops for defense - by RK MOD ============================== ;
+			
+			GUICtrlSetState($g_hChkRequestTroopsEnableDefense, $g_bRequestTroopsEnableDefense ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkRequestDefense()
+			GUICtrlSetData($g_hTxtRequestCCDefense, $g_sRequestTroopsTextDefense)
+			GUICtrlSetData($g_hTxtRequestDefenseEarly, $g_iRequestDefenseEarly)
+			
+			; ================================================== Boost for Magic Spell by RK MOD ================================= ;
+			
+			GUICtrlSetState($g_hChkBoostBMagic, $g_iChkBoostBMagic = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbBoostBrMagic, $g_iCmbBoostBrMagic)
+			chkBoostBMagic()
+			BoostBrMagic()
+			GUICtrlSetState($g_hChkBoostCMagic, $g_iChkBoostCMagic = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbBoostClMagic, $g_iCmbBoostClMagic)
+			chkBoostCMagic()
+			BoostClMagic()
+			
+			; ================================================== Multi Finger - Added by RK MOD ======================================== ;
+			
+			_GUICtrlComboBox_SetCurSel($g_hCmbDBMultiFinger, $g_iMultiFingerStyle)
+			
+			; ================================================== Unit/Wave Factor  - Added by RK MOD ======================================== ;
+
+			GUICtrlSetState($g_hChkUnitFactor, $g_iChkUnitFactor ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($g_hTxtUnitFactor, $g_iTxtUnitFactor)
+			chkUnitFactor()
+			GUICtrlSetState($g_hChkWaveFactor, $g_iChkWaveFactor ? $GUI_CHECKED : $GUI_UNCHECKED)
+			GUICtrlSetData($g_hTxtWaveFactor, $g_iTxtWaveFactor)
+			chkWaveFactor()
+			
+			; ================================================== Check Grand Warden Mode - Added by RK MOD ======================================== ;
+			
+			GUICtrlSetState($g_hChkCheckWardenMode, $g_bCheckWardenMode ? $GUI_CHECKED : $GUI_UNCHECKED)
+			chkCheckWardenMode()
+			_GUICtrlComboBox_SetCurSel($g_hCmbCheckWardenMode, $g_iCheckWardenMode)
+			
+			; ==================================================  Upgrade Management - Added by RK MOD ======================================== ;
+			
+			GUICtrlSetState($g_hChkUpdateNewUpgradesOnly, $g_ibUpdateNewUpgradesOnly ? $GUI_CHECKED : $GUI_UNCHECKED)
 			
 	EndSwitch
 

@@ -105,9 +105,16 @@ Func CheckSwitchAcc()
 	; Force Switch when PBT detected
 	If $g_abPBActive[$g_iCurAccount] = True Then $bForceSwitch = True
 
-	If $g_iCommandStop = 0 Then ; Forced to switch when in halt attack mode
+	If $g_iCommandStop = 0 Or $g_iCommandStop = 3 Then ; Forced to switch when in halt attack mode
 		SetLog("This account is in halt attack mode, switching to another account", $COLOR_ACTION)
-		SetSwitchAccLog(" - HaltAttack, Force switch")
+		SetSwitchAccLog(" - Halt Attack, Force switch")
+		; Force the remain train time to 120 min just in case of SmartSwitch checked
+		If $g_bChkSmartSwitch then
+			$g_aiRemainTrainTime[$g_iCurAccount] = 120
+			$g_aiTimerStart[$g_iCurAccount] = TimerInit()
+			SetDebugLog("Halt Account " & $g_asProfileName[$g_iCurAccount] & " with " &  $g_aiRemainTrainTime[$g_iCurAccount] & "'m")
+		EndIf
+		; Force switch
 		$bForceSwitch = True
 	ElseIf $g_bWaitForCCTroopSpell Then
 		SetLog("Still waiting for CC Troops/Spells, switching to another Account", $COLOR_ACTION)
@@ -140,9 +147,12 @@ Func CheckSwitchAcc()
 		SetSwitchAccLog("Stay at [" & $g_iCurAccount + 1 & "]", $COLOR_SUCCESS)
 		If _Sleep(500) Then Return
 	Else
-		$nMinRemainTrain = CheckTroopTimeAllAccount($bForceSwitch)
+		
 
-		If $g_bChkSmartSwitch = 1 Then ; Smart switch
+		If $g_bChkSmartSwitch = True Then ; Smart switch
+			SetDebugLog("-Smart Switch-")
+			$nMinRemainTrain = CheckTroopTimeAllAccount($bForceSwitch)
+			
 			If $nMinRemainTrain <= 1 And Not $bForceSwitch And Not $g_bDonateLikeCrazy Then ; Active (force switch shall give priority to Donate Account)
 				If $g_bDebugSetlog Then SetDebugLog("Switch to or Stay at Active Account: " & $g_iNextAccount + 1, $COLOR_DEBUG)
 				$g_iDonateSwitchCounter = 0
@@ -163,20 +173,31 @@ Func CheckSwitchAcc()
 				EndIf
 			EndIf
 		Else ; Normal switch (continuous)
+		    SetDebugLog("-Normal Switch-")
 			$g_iNextAccount = $g_iCurAccount + 1
 			If $g_iNextAccount > $g_iTotalAcc Then $g_iNextAccount = 0
 			While $abAccountNo[$g_iNextAccount] = False
 				$g_iNextAccount += 1
+				SetDebugLog("- While Account: " & $g_asProfileName[$g_iNextAccount] & " number: " & $g_iNextAccount + 1)
 				If $g_iNextAccount > $g_iTotalAcc Then $g_iNextAccount = 0 ; avoid idle Account
 			WEnd
 		EndIf
-
+        
+		SetDebugLog("- Current Account: " & $g_asProfileName[$g_iCurAccount] & " number: " & $g_iCurAccount + 1)
+		SetDebugLog("- Next Account: " & $g_asProfileName[$g_iNextAccount]& " number: " & $g_iNextAccount + 1)
+		
 		; Just a loop for all acc to check it if necessary
 		For $i = 0 To $g_iTotalAcc
-			; Check if the next account is PBT and IF the remain Train Time is Less/More than 2 minutes
-			If $g_abPBActive[$g_iNextAccount] And $g_aiRemainTrainTime[$g_iNextAccount] > 2 Then
-				SetLog("Account " & $g_iNextAccount + 1 & " is in a Personal Break Time!", $COLOR_INFO)
-				SetSwitchAccLog(" - Account " & $g_iNextAccount + 1 & " is in PTB")
+			; Check if the next account is PBT and IF the remain Train Time is Less/More than 2 minutes OR the account is disable
+			If($g_abPBActive[$g_iNextAccount] And $g_aiRemainTrainTime[$g_iNextAccount] > 2) Or $abAccountNo[$g_iNextAccount] = False Then
+				if $abAccountNo[$g_iNextAccount] = False Then
+					SetLog("Account " & $g_iNextAccount + 1 & " disabled!", $COLOR_INFO)
+					SetSwitchAccLog(" - Account " & $g_iNextAccount + 1 & " disabled")
+				Else
+					SetLog("Account " & $g_iNextAccount + 1 & " is in a Personal Break Time!", $COLOR_INFO)
+					SetSwitchAccLog(" - Account " & $g_iNextAccount + 1 & " is in PTB")
+				EndIf
+
 				$g_iNextAccount = $g_iNextAccount + 1
 				If $g_iNextAccount > $g_iTotalAcc Then $g_iNextAccount = 0
 			Else
@@ -191,7 +212,7 @@ Func CheckSwitchAcc()
 			For $i = 0 To $g_iTotalAcc
 				If $g_abDonateOnly[$i] Then SetSwitchAccLog(" - Donate Acc [" & $i + 1 & "]")
 				If $g_abPBActive[$i] Then SetSwitchAccLog(" - PBT Acc [" & $i + 1 & "]")
-			NExt
+			Next
 		EndIf
 
 		If $g_iNextAccount <> $g_iCurAccount Then
@@ -204,6 +225,8 @@ Func CheckSwitchAcc()
 		Else
 			SetLog("Staying in this account")
 			SetSwitchAccLog("Stay at [" & $g_iCurAccount + 1 & "]", $COLOR_SUCCESS)
+			VillageReport()
+			CheckFarmSchedule()
 		EndIf
 	EndIf
 
@@ -361,6 +384,9 @@ EndIf
 
 		$StartOnlineTime = TimerInit()
 		SetSwitchAccLog("Switched to Acc [" & $NextAccount + 1 & "]", $COLOR_SUCCESS)
+		
+		; Reset the log
+		$g_hLogFile = 0
 
 		If $g_bChkSharedPrefs Then
 			; disconnect account again for saving shared_prefs
@@ -394,7 +420,9 @@ EndIf
 		SetLog("Switching account failed!", $COLOR_ERROR)
 		SetSwitchAccLog("Switching to Acc " & $NextAccount + 1 & " Failed!", $COLOR_ERROR)
 		If $iRetry <= 3 Then
-			ClickP($aAway, 3, 500)
+			Local $ClickPoint = $aAway
+			If $g_bChkSuperCellID Then $ClickPoint = $aCloseTabSCID
+			ClickP($ClickPoint, 2, 500)
 			checkMainScreen()
 		Else
 			$iRetry = 0
@@ -597,8 +625,8 @@ Func SwitchCOCAcc_ConnectedSCID(ByRef $bResult)
 	For $i = 0 To 20 ; Checking Green Connected button continuously in 20sec
 		If _ColorCheck(_GetPixelColor($aButtonConnectedSCID[0], $aButtonConnectedSCID[1], True), Hex($aButtonConnectedSCID[2], 6), $aButtonConnectedSCID[3]) Then
 			Click($aButtonConnectedSCID[0], $aButtonConnectedSCID[1], 1, 0, "Click Connected SC_ID")
-			Setlog("   1. Click Connected Supercell ID")
-			If _Sleep(2500) Then Return "Exit"
+			SetLog("   1. Click Connected Supercell ID")
+			If _Sleep(600) Then Return "Exit"
 			;ExitLoop
 			Return "OK"
 		EndIf
@@ -616,21 +644,21 @@ Func SwitchCOCAcc_ConnectedSCID(ByRef $bResult)
 EndFunc   ;==>SwitchCOCAcc_ConnectedSCID
 
 Func SwitchCOCAcc_ConfirmSCID(ByRef $bResult)
-	For $i = 0 To 20 ; Checking LogOut & Confirm button continuously in 20sec
-		If _ColorCheck(_GetPixelColor($aButtonLogOutSCID[0], $aButtonLogOutSCID[1], True), Hex($aButtonLogOutSCID[2], 6), $aButtonLogOutSCID[3]) Then
+	For $i = 0 To 30 ; Checking LogOut & Confirm button continuously in 30sec
+		If QuickMIS("BC1", $g_sImgLogOutButton, 620, 246, 693, 308) Then ; Check Log Out button
 			SetLog("   2. Click Log Out Supercell ID")
-			Click($aButtonLogOutSCID[0], $aButtonLogOutSCID[1], 2, 500, "Click Log Out SC_ID") ; Click LogOut button
+			Click($g_iQuickMISX + 587, $g_iQuickMISY + 268, 2, 500, "Click Log Out SC_ID") ; Click LogOut button
 			If _Sleep(500) Then Return "Exit"
 
-			For $j = 0 To 10 ; Click Confirm button
-				If _ColorCheck(_GetPixelColor($aButtonConfirmSCID[0], $aButtonConfirmSCID[1], True), Hex($aButtonConfirmSCID[2], 6), $aButtonConfirmSCID[3]) Then
+			For $j = 0 To 20
+				If QuickMIS("BC1", $g_sImgConfirmButton, 400, 414, 586, 455) Then ; Check Confirm button
 					SetLog("   3. Click Confirm Supercell ID")
-					Click($aButtonConfirmSCID[0], $aButtonConfirmSCID[1], 1, 0, "Click Confirm SC_ID")
+					Click($g_iQuickMISX + 370, $g_iQuickMISY + 402, 1, 0, "Click Confirm SC_ID") ; Click Confirm button
 					If _Sleep(500) Then Return "Exit"
 					;ExitLoop
 					Return "OK"
 				EndIf
-				If $j = 10 Then
+				If $j = 20 Then
 					$bResult = False
 					;ExitLoop 3
 					Return "Error"
@@ -641,7 +669,7 @@ Func SwitchCOCAcc_ConfirmSCID(ByRef $bResult)
 
 		SetDebugLog("Checking LogOut & Confirm button x:" & $aButtonLogOutSCID[0] & " y:" & $aButtonLogOutSCID[1] & " : " & _GetPixelColor($aButtonLogOutSCID[0], $aButtonLogOutSCID[1], True))
 
-		If $i = 20 Then
+		If $i = 30 Then
 			$bResult = False
 			;ExitLoop 2
 			Return "Error"
@@ -653,28 +681,53 @@ EndFunc   ;==>SwitchCOCAcc_ConfirmSCID
 
 Func SwitchCOCAcc_ClickAccountSCID(ByRef $bResult, $NextAccount, $iStep = 4)
 	Local $YCoord = Int(336 + 73.5 * $NextAccount)
+	Local $DeltaTotal8Acc = $g_iTotalAcc = 7 ? 14 : 0
 	Local $iRetryCloseSCIDTab = 0
 	For $i = 0 To 30 ; Checking "Log in with SuperCell ID" button continuously in 30sec
 		If _ColorCheck(_GetPixelColor($aLoginWithSupercellID[0], $aLoginWithSupercellID[1], True), Hex($aLoginWithSupercellID[2], 6), $aLoginWithSupercellID[3]) And _
 		_ColorCheck(_GetPixelColor($aLoginWithSupercellID2[0], $aLoginWithSupercellID2[1], True), Hex($aLoginWithSupercellID2[2], 6), $aLoginWithSupercellID2[3]) Then
 			SetLog("   " & $iStep & ". Click Log in with Supercell ID")
 			Click($aLoginWithSupercellID[0], $aLoginWithSupercellID[1], 1, 0, "Click Log in with SC_ID")
-			If _Sleep(3000) Then Return "Exit"
+			If _Sleep(600) Then Return "Exit"
 
 			For $j = 0 To 20 ; Checking Account List continuously in 20sec
-				If _ColorCheck(_GetPixelColor($aListAccountSCID[0], $aListAccountSCID[1], True), Hex($aListAccountSCID[2], 6), $aListAccountSCID[3]) Then
+				If QuickMIS("BC1", $g_sImgListAccounts, 490, 201, 524, 232) Then
+					Local $bDragDone = False
 					If $NextAccount >= 4 Then
 						$YCoord = Int(408 - 73.5 * ($g_iTotalAcc - $NextAccount))
+						SetLog("     drag for more accounts")
 						ClickDrag(700, 590, 700, 172, 2000)
-						If _Sleep(500) Then Return "Exit"
+						If _Sleep(250) Then Return "Exit"
+						For $x = 0 To 5
+							If QuickMIS("N1", $g_sImgListAccounts, 415, 470, 442, 487) = "OR" Then
+								$bDragDone =  True
+								ExitLoop
+							EndIf
+							If _Sleep(250) Then Return "Exit" ; wait 1.5 seconds for last account to show up
+						Next
 					EndIf
-					Click(270, $YCoord) ; Click Account
-					SetLog("   " & ($iStep + 1) & ". Click Account [" & $NextAccount + 1 & "] Supercell ID")
-					If _Sleep(500) Then Return "Exit"
-					SetLog("Please wait for loading CoC...!")
+
+					If $NextAccount < 4 Or $bDragDone Then
+						Click(270, $YCoord, 3, 1000) ; Click Account
+						If _Sleep(250) Then Return "Exit"
+						$bResult = True
+					EndIf
+				ElseIf QuickMIS("BC1", $g_sImgListAccounts, 470, 190, 497, 297) Then
+					$YCoord = Int(359 - 16 * ($g_iTotalAcc - 1) + 32 * $NextAccount) + $DeltaTotal8Acc
+					Click(300, $YCoord, 3, 1000) ; Click Account
+					If _Sleep(250) Then Return "Exit"
 					$bResult = True
+				EndIf
+
+				If $bResult Then
+					SetLog("   " & ($iStep + 1) & ". Click Account [" & $NextAccount + 1 & "] Supercell ID")
+									  
+					SetLog("Please wait for loading CoC...!")
+					
 					Return "OK"
-				ElseIf $j = 10 Then
+				EndIf
+
+				If $j = 20 Then
 					$iRetryCloseSCIDTab += 1
 					If $iRetryCloseSCIDTab <= 3 Then
 						SetLog("   " & $iStep & ".5 Click Close Tab Supercell ID")
@@ -788,13 +841,15 @@ Func CheckTroopTimeAllAccount($bExcludeCurrent = False) ; Return the minimum rem
 	For $i = 0 To $g_iTotalAcc
 		If $bExcludeCurrent And $i = $g_iCurAccount Then ContinueLoop
 		If $abAccountNo[$i] And Not $g_abDonateOnly[$i] Then ;	Only check Active profiles
-			If $g_aiRemainTrainTime[$i] <= $iMinRemainTrain Then
+			If $g_aiRemainTrainTime[$i] < $iMinRemainTrain Then
 				$iMinRemainTrain = $g_aiRemainTrainTime[$i]
 				$g_iNextAccount = $i
 			EndIf
 		EndIf
 	Next
-
+    
+	SetDebugLog("- Min Remain Train Time is " & $iMinRemainTrain)
+	
 	Return $iMinRemainTrain
 
 EndFunc   ;==>CheckTroopTimeAllAccount
@@ -956,6 +1011,49 @@ Func CheckLoginWithSupercellID()
 	Return $bResult
 EndFunc   ;==>CheckLoginWithSupercellID
 
+Func CheckLoginWithSupercellIDScreen()
+
+	Local $g_sImgSCID = @ScriptDir &"\imgxml\SuperCellID\Accounts"
+	Local $AccountsCoord[0][2]
+
+	; Account List check be there, validate with imgloc
+		If UBound(decodeSingleCoord(FindImageInPlace("LoginWithSupercellID", $g_sImgLoginWithSupercellID, "318,678(125,30)", False))) > 1 Then
+			; Google Account selection found
+			SetLog("Verified Log in with Supercell ID boot screen")
+
+			Click($aLoginWithSupercellID[0], $aLoginWithSupercellID[1], 1, 0, "Click Log in with SC_ID")
+			If _Sleep(2000) Then return
+			For $i = 0 to 10
+				Local $XCoordinates = QuickMIS("CX", $g_sImgSCID, 600, 165, 690, 605, True, $g_bDebugImageSave)
+				If UBound($XCoordinates) > 0 Then
+					SetDebugLog("[SCID Accounts]: " & UBound($XCoordinates), $COLOR_DEBUG)
+					Redim $AccountsCoord[UBound($XCoordinates)][2]
+					For $j = 0 to UBound($XCoordinates) - 1
+						Local $Coordinates = StringSplit($XCoordinates[$j], ",", 2)
+						$AccountsCoord[$j][0] = $Coordinates[0] + 600
+						$AccountsCoord[$j][1] = $Coordinates[1] + 165
+						SetDebugLog("[" & $j &  "] Account coordinates: " & $AccountsCoord[$j][0] & "," & $AccountsCoord[$j][1])
+					Next
+					_ArraySort($AccountsCoord, 0, 0, 0, 1)  ; short by column 1 [Y]
+					Setlog("SC_ID account number " & $g_iWhatSCIDAccount2Use + 1)
+					If $g_iWhatSCIDAccount2Use + 1 > UBound($XCoordinates) then
+						setlog("You selected a SCID undetected account!!", $COLOR_ERROR)
+						ExitLoop
+					EndIf
+					Click($AccountsCoord[$g_iWhatSCIDAccount2Use][0] - 150 , $AccountsCoord[$g_iWhatSCIDAccount2Use][1], 1)
+					SetLog("Please wait for loading CoC...!")
+					ExitLoop
+				EndIf
+
+				If $g_bRunState = False Then Return
+				If _sleep(1000) then return
+			NExt
+		Else
+			SetDebugLog("Log in with Supercell ID boot screen not verified")
+		EndIf
+
+EndFunc
+
 Func SwitchAccountCheckProfileInUse($sNewProfile)
 	; now check if profile is used in another group
 	Local $sInGroups = ""
@@ -1018,3 +1116,199 @@ Func SwitchAccountCheckProfileInUse($sNewProfile)
 		Return False
 	EndIf
 EndFunc   ;==>SwitchAccountCheckProfileInUse
+
+Func CheckFarmSchedule()
+
+	If Not ProfileSwitchAccountEnabled() Then Return
+
+	Static $aiActionDone[8] = [0, 0, 0, 0, 0, 0, 0, 0]
+	Static $iStartHour = @HOUR
+	Static $iDay = @YDay
+	Local $bNeedSwitchAcc = False, $bNeedRunBot = False
+
+	If $g_bFirstStart And $iStartHour = -1 Then $iStartHour = @HOUR
+	Local $bActionDone = False
+	If $g_bDebugSetlog Then SetDebugLog("Checking Farm Schedule...", $COLOR_DEBUG)
+
+	For $i = 0 To 7
+		If $i > $g_iTotalAcc Then ExitLoop
+
+		If $iDay < @YDay Then ; reset timers
+			$aiActionDone[$i] = 0
+			$iStartHour = -1
+			If $i >= _Min($g_iTotalAcc, 7) Then $iDay = @YDay
+			If $g_bDebugSetlog Then SetDebugLog("New day is coming $iDay/ @YDay : " & $iDay & "/ " & @YDay, $COLOR_DEBUG)
+		EndIf
+		If $g_abChkSetFarm[$i] Then
+			Local $iAction = -1
+
+			; Check timing schedule
+			Local $iTimer1 = 25, $iTimer2 = 25
+			If $g_aiCmbAction1[$i] >= 1 And $g_aiCmbCriteria1[$i] = 5 And $g_aiCmbTime1[$i] >= 0 Then $iTimer1 = Number($g_aiCmbTime1[$i])
+			If $g_aiCmbAction2[$i] >= 1 And $g_aiCmbCriteria2[$i] = 5 And $g_aiCmbTime2[$i] >= 0 Then $iTimer2 = Number($g_aiCmbTime2[$i])
+			If $g_bDebugSetlog Then SetDebugLog($i + 1 & ". $iTimer1: " & $iTimer1 & ", $iTimer2: " & $iTimer2 & ", Max: " & _Max($iTimer1, $iTimer2) & ", Min: " & _Min($iTimer1, $iTimer2) & ", ActionDone: " & $aiActionDone[$i], $COLOR_DEBUG)
+
+			If @HOUR < _Min($iTimer1, $iTimer2) Then ; both timers are ahead.
+				;Do nothing
+			ElseIf @HOUR < _Max($iTimer1, $iTimer2) Then ; 1 timer has passed, 1 timer ahead
+				If $iTimer1 < $iTimer2 Then ; reach timer1, let's do action1
+					If $aiActionDone[$i] <> 1 And $iStartHour < $iTimer1 Then
+						$iAction = $g_aiCmbAction1[$i] - 1
+						$aiActionDone[$i] = 1
+					EndIf
+				Else ; reach timer2, let's do action2
+					If $aiActionDone[$i] <> 2 And $iStartHour < $iTimer2 Then
+						$iAction = $g_aiCmbAction2[$i] - 1
+						$aiActionDone[$i] = 2
+					EndIf
+				EndIf
+				If $g_bDebugSetlog Then SetDebugLog($i + 1 & ". @HOUR (<): " & @HOUR & ", ActionDone: " & $aiActionDone[$i] & ", StartHour: " &$iStartHour & ", Action: " & $iAction, $COLOR_DEBUG)
+			Else ; passed both timers
+				If $iTimer1 < $iTimer2 Then
+					If $aiActionDone[$i] <> 2 And $iStartHour < $iTimer2 Then
+						$iAction = $g_aiCmbAction2[$i] - 1
+						$aiActionDone[$i] = 2
+					EndIf
+				Else
+					If $aiActionDone[$i] <> 1 And $iStartHour < $iTimer1 Then
+						$iAction = $g_aiCmbAction1[$i] - 1
+						$aiActionDone[$i] = 1
+					EndIf
+				EndIf
+				If $g_bDebugSetlog Then SetDebugLog($i + 1 & ". @HOUR (>): " & @HOUR & ", ActionDone: " & $aiActionDone[$i] & ", StartHour: " &$iStartHour & ", Action: " & $iAction, $COLOR_DEBUG)
+			EndIf
+
+			; Check resource criteria for current account
+			If $i = $g_iCurAccount Then
+				Local $asText[4] = ["Gold", "Elixir", "DarkE", "Trophy"]
+				While 1
+					If $g_aiCmbAction1[$i] >= 1 And $g_aiCmbCriteria1[$i] >= 1 And $g_aiCmbCriteria1[$i] <= 4 Then
+						For $r = 1 To 4
+							If $g_aiCmbCriteria1[$i] = $r And Number($g_aiCurrentLoot[$r - 1]) >= Number($g_aiTxtResource1[$i]) Then
+								SetLog("Village " & $asText[$r - 1] & " detected above 1st criterium: " & $g_aiTxtResource1[$i])
+								$iAction = $g_aiCmbAction1[$i] - 1
+								ExitLoop 2
+							EndIf
+						Next
+					EndIf
+					If $g_aiCmbAction2[$i] >= 1 And $g_aiCmbCriteria2[$i] >= 1 And $g_aiCmbCriteria2[$i] <= 4 Then
+						For $r = 1 To 4
+							If $g_aiCmbCriteria2[$i] = $r And Number($g_aiCurrentLoot[$r - 1]) < Number($g_aiTxtResource2[$i]) And Number($g_aiCurrentLoot[$r - 1]) > 1 Then
+								SetLog("Village " & $asText[$r - 1] & " detected below 2nd criterium: " & $g_aiTxtResource2[$i])
+								$iAction = $g_aiCmbAction2[$i] - 1
+								ExitLoop 2
+							EndIf
+						Next
+					EndIf
+					ExitLoop
+				WEnd
+			EndIf
+
+			; Action
+			Switch $iAction
+				Case 0 ; turn Off (idle)
+					If GUICtrlRead($g_ahChkAccount[$i]) = $GUI_CHECKED Then
+
+						; Checking if this is the last active account
+						Local $iSleeptime = CheckLastActiveAccount($i)
+						If $iSleeptime > 1 Then
+							SetLog("This is the last active/donate account to turn off.")
+							SetLog("Let's go sleep until another account is scheduled to turn active/donate")
+							SetSwitchAccLog("   Acc. " & $i + 1 & " go sleep", $COLOR_BLUE)
+							UniversalCloseWaitOpenCoC($iSleeptime * 60 * 1000, "FarmSchedule", False, True) ; wake up & full restart
+						EndIf
+
+						GUICtrlSetState($g_ahChkAccount[$i], $GUI_UNCHECKED)
+						chkAccount($i)
+						$bActionDone = True
+						If $i = $g_iCurAccount Then $g_bInitiateSwitchAcc = True
+						SetLog("Acc [" & $i + 1 & "] turned OFF")
+						SetSwitchAccLog("   Acc. " & $i + 1 & " now Idle", $COLOR_BLUE)
+					EndIf
+				Case 1 ; turn Donate
+					If GUICtrlRead($g_ahChkDonate[$i]) = $GUI_UNCHECKED Then
+						_GUI_Value_STATE("CHECKED", $g_ahChkAccount[$i] & "#" & $g_ahChkDonate[$i])
+						$bActionDone = True
+						If $i = $g_iCurAccount Then $bNeedRunBot = True
+						SetLog("Acc [" & $i + 1 & "] turned ON for Donating")
+						SetSwitchAccLog("   Acc. " & $i + 1 & " now Donate", $COLOR_BLUE)
+					EndIf
+				Case 2 ; turn Active
+					If GUICtrlRead($g_ahChkAccount[$i]) = $GUI_UNCHECKED Or GUICtrlRead($g_ahChkDonate[$i]) = $GUI_CHECKED Then
+						GUICtrlSetState($g_ahChkAccount[$i], $GUI_CHECKED)
+						GUICtrlSetState($g_ahChkDonate[$i], $GUI_UNCHECKED)
+						$bActionDone = True
+						If $i = $g_iCurAccount Then $bNeedRunBot = True
+						SetLog("Acc [" & $i + 1 & "] turned ON for Farming")
+						SetSwitchAccLog("   Acc. " & $i + 1 & " now Active", $COLOR_BLUE)
+					EndIf
+			EndSwitch
+		EndIf
+	Next
+
+	If $bActionDone Then
+		SaveConfig_600_35_2() ; Save config profile after changing botting type
+		ReadConfig_600_35_2() ; Update variables
+		UpdateMultiStats(False)
+	EndIf
+
+	If _Sleep(500) Then Return
+	If $g_bInitiateSwitchAcc Then
+		Local $aActiveAccount = _ArrayFindAll($g_abAccountNo, True)
+		If UBound($aActiveAccount) >= 1 Then
+			$g_iNextAccount = $aActiveAccount[0]
+			If $g_sProfileCurrentName <> $g_asProfileName[$g_iNextAccount] Then
+				If $g_iGuiMode = 1 Then
+					; normal GUI Mode
+					_GUICtrlComboBox_SetCurSel($g_hCmbProfile, _GUICtrlComboBox_FindStringExact($g_hCmbProfile, $g_asProfileName[$g_iNextAccount]))
+					cmbProfile()
+					DisableGUI_AfterLoadNewProfile()
+				Else
+					; mini or headless GUI Mode
+					saveConfig()
+					$g_sProfileCurrentName = $g_asProfileName[$g_iNextAccount]
+					LoadProfile(False)
+				EndIf
+			EndIf
+			runBot()
+		EndIf
+
+	ElseIf $bNeedRunBot Then
+		runBot()
+	EndIf
+EndFunc   ;==>CheckFarmSchedule
+
+Func CheckLastActiveAccount($i)
+
+	Local $iSleeptime = 0 ; result in minutes
+	Local $aActiveAccount = _ArrayFindAll($g_abAccountNo, True)
+
+	If $i = $g_iCurAccount And UBound($aActiveAccount) <= 1 Then
+		SetLog("  This is the last active/donate account to turn off.")
+
+		Local $iCurrentTime = @HOUR + @MIN / 60 + @SEC / 3600 ; decimal hour
+		Local $iSoonestTimer = -1
+		For $i = 0 To 7
+			If $i > $g_iTotalAcc Then ExitLoop
+			If $g_abChkSetFarm[$i] Then
+				If $g_aiCmbAction1[$i] >= 1 And $g_aiCmbCriteria1[$i] = 5 And $g_aiCmbTime1[$i] >= 0 Then
+					Local $ConvertTime1 = $g_aiCmbTime1[$i] + $g_aiCmbTime1[$i] <= @HOUR ? 24 : 0
+					If $iSoonestTimer = -1 Or $iSoonestTimer > $ConvertTime1 Then $iSoonestTimer = $ConvertTime1
+				EndIf
+				If $g_aiCmbAction2[$i] >= 1 And $g_aiCmbCriteria2[$i] = 5 And $g_aiCmbTime2[$i] >= 0 Then
+					Local $ConvertTime2 = $g_aiCmbTime2[$i] + $g_aiCmbTime2[$i] <= @HOUR ? 24 : 0
+					If $iSoonestTimer = -1 Or $iSoonestTimer > $ConvertTime2 Then $iSoonestTimer = $ConvertTime2
+				EndIf
+				If $g_bDebugSetlog Then SetDebugLog("@Hour: " & @HOUR & "Timers " & $i + 1 & ": " & $g_aiCmbTime1[$i] & " / " & $g_aiCmbTime2[$i] & ". $iSoonestTimer = " & $iSoonestTimer)
+			EndIf
+		Next
+		If $g_bDebugSetlog Then SetDebugLog("$iSoonestTimer = " & $iSoonestTimer)
+		If $iSoonestTimer >= 0 Then $iSleeptime = ($iSoonestTimer - $iCurrentTime) * 60
+	EndIf
+
+	If $g_bDebugSetlog Then SetDebugLog("$iSleeptime: " & Round($iSleeptime, 2) & " m")
+
+	Return $iSleeptime
+
+EndFunc   ;==>CheckLastActiveAccount
+

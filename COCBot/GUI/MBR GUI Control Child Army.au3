@@ -120,7 +120,13 @@ Func lblTotalCountTroop1()
 	Else
 		GUICtrlSetState($g_hLblTotalProgress, $GUI_HIDE)
 	EndIf
-
+	If $g_iChkAutoCamp = 1 Then
+		Local $bLocalBbg = False
+		$g_iSpaceForTroopsFill = $g_iTotalCampForcedValue - $TotalTroopsToTrain
+		GUICtrlSetData($g_ahTxtTrainArmyTroopCount[$eTroopArcher], $g_aiArmyCompTroops[$eTroopArcher] + $g_iSpaceForTroopsFill)
+		$g_aiArmyCompTroops[$eTroopArcher] = $g_aiArmyCompTroops[$eTroopArcher] + $g_iSpaceForTroopsFill
+		If $bLocalBbg then setlog($g_aiArmyCompTroops[$eTroopArcher] & ", " & $g_iTotalCampForcedValue & ", " & $TotalTroopsToTrain & ", " & $g_iSpaceForTroopsFill)
+	EndIf
 	lblTotalCountTroop2()
 EndFunc   ;==>lblTotalCountTroop1
 
@@ -297,6 +303,16 @@ Func chkCloseWaitEnable()
 		EndIf
 	EndIf
 EndFunc   ;==>chkCloseWaitEnable
+
+; Max logout time - RK MOD
+Func chkTrainLogoutMaxTime()
+	If GUICtrlRead($g_hChkTrainLogoutMaxTime) = $GUI_CHECKED Then
+		_GUI_Value_STATE("ENABLE", $g_hTxtTrainLogoutMaxTime & "#" & $g_hLblTrainLogoutMaxTime)
+	Else
+		_GUI_Value_STATE("DISABLE", $g_hTxtTrainLogoutMaxTime & "#" & $g_hLblTrainLogoutMaxTime)
+	EndIf
+EndFunc   ;==>chkTrainLogoutMaxTime
+
 
 Func chkCloseWaitTrain()
 	$g_bCloseWithoutShield = (GUICtrlRead($g_hChkCloseWithoutShield) = $GUI_CHECKED)

@@ -1,5 +1,5 @@
 ; #FUNCTION# ====================================================================================================================
-; Name ..........: OCRbypass / RK Auto Update camps v.0.4 (#ID135-)
+; Name ..........: OCRbypass / RK Auto Update camps v.0.5 (#ID135-)
 ; Description ...: ByPass camps. capacity auto update
 ; Author ........: Boludoz (25/6/2018) Rulesss (1/7/2018)
 ; Modified ......: Boludoz (1/7/2018)
@@ -12,10 +12,13 @@
 
 Func _getArmyCapacityOnTrainTroops($x_start, $y_start) ;  -> Gets quantity of troops in army Window
 ; BYPASS HACK
-
+    Local $aTempResult[3] = [0, 0, 0]
 	Local $aResult[3] = [0, 0, 0]
 	$aResult[0] = getOcrAndCapture("coc-NewCapacity", $x_start, $y_start, 67, 14, True)
+
 	Local $dbg = 0
+	
+	If StringInStr($aResult[0], "#") Then
 		Local $aTempResult = StringSplit($aResult[0], "#", $STR_NOCOUNT)
 		$aResult[1] = Number($aTempResult[0])
 		$aResult[2] = Number($aTempResult[1])
@@ -32,6 +35,10 @@ Func _getArmyCapacityOnTrainTroops($x_start, $y_start) ;  -> Gets quantity of tr
 		ElseIf $aResult[2] >= 15 Then
 		GUICtrlSetData($g_hTxtTotalCampForced, $aResult[2])
 		$g_iTotalCampForcedValue = $aResult[2]
+		lblTotalCountTroop1()
+	Else
+		SetLog("DEBUG | ERROR on GetCurrentArmy", $COLOR_ERROR)
+	EndIf
 
 	If $dbg = 1 Then Setlog($aResult[0])
 	If $dbg = 1 Then Setlog($g_iTotalSpellValue)
@@ -47,16 +54,16 @@ Func CheckAutoCamp() ; Only first Run and th5 + (Then every time he does the tro
 	If $dbg = 1 Then Setlog($g_iTotalSpellValue)
 	Local $iCmpSpell = StringCompare($g_iTotalSpellValue, "0")
         If $iCmpSpell = 0 And $g_iTownHallLevel >= 5 Then ; Spell camp
-            click(30, 584)
-            if _sleep(1000) then return
-            click(407, 132)
-            if _sleep(1000) then return
+            Click(30, 584)
+            If _Sleep(1000) Then Return
+            Click(407, 132)
+            If _Sleep(1000) Then return
 			Local $NewSpellOCR = getArmyCapacityOnTrainTroops(48, 160) ; Check spell camps
-            click(280, 132)
-            if _sleep(1000) then return
+            Click(280, 132)
+            If _Sleep(1000) Then Return
 			Local $NewCampOCR = getArmyCapacityOnTrainTroops(48, 160) ; Check army camps
-				click(825, 122)
-			if _sleep(1000) then return
+				Click(825, 122)
+			If _Sleep(1000) Then Return
 		Endif
 EndFunc   ;==>CheckAutoCamp
 
@@ -76,4 +83,4 @@ Func chkAutoCamp()
     Else
     $g_iChkAutoCamp = 0
     EndIf
-EndFunc ;==>chkLabCheck
+EndFunc ;==>chkAutoCamp

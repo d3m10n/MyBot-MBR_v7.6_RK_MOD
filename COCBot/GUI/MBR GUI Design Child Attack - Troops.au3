@@ -37,6 +37,15 @@ Global $g_hLblBoosthour = 0, $g_ahLblBoosthoursE = 0
 Global $g_hLblBoosthours[12] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 Global $g_hChkBoostBarracksHours[24] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], $g_hChkBoostBarracksHoursE1 = 0, $g_hChkBoostBarracksHoursE2 = 0
 
+;Max logout time RK MOD
+Global $g_hChkTrainLogoutMaxTime = 0, $g_hTxtTrainLogoutMaxTime = 4, $g_hLblTrainLogoutMaxTime
+
+; Boost for Magic Spell by RK MOD
+Global $g_hChkBoostBMagic  = 0, $g_hCmbBoostBrMagic = 0, $g_hChkBoostCMagic = 0, $g_hCmbBoostClMagic = 0
+
+; Check Grand Warden Mode - RK MOD
+Global $g_hChkCheckWardenMode = 0, $g_hCmbCheckWardenMode = 0
+
 ; Train Order sub-tab
 Func LoadTranslatedTrainTroopsOrderList()
 
@@ -706,11 +715,11 @@ Func CreateBoostSubTab()
 		GUICtrlCreateLabel(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "LblBarracksBoost", "Barracks") & " " & $sTextBoostLeft, $x + 20 + 29, $y + 4 + 7, -1, -1)
 			$sTxtTip = GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "LblBarracksBoost_Info_01", "Use this to boost your Barracks with GEMS! Use with caution!")
 			_GUICtrlSetTip(-1, $sTxtTip)
-		$g_hCmbBoostBarracks = GUICtrlCreateCombo("", $x + 140 + 45, $y + 7, 60, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+		$g_hCmbBoostBarracks = GUICtrlCreateCombo("", $x + 140 + 30, $y + 7, 60, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
 			GUICtrlSetData(-1, "0|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24|No limit", "0")
 			_GUICtrlSetTip(-1, $sTxtTip)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
-
+    
 	$y += 65
 	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "Group_02", "Boost Spell Factories"), $x - 20, $y - 20, $g_iSizeWGrpTab3, 50)
 		_GUICtrlCreateIcon($g_sLibIconPath, $eIcnSpellFactoryBoost, $x - 10, $y - 2, 24, 24)
@@ -754,13 +763,33 @@ Func CreateBoostSubTab()
 			_GUICtrlSetTip(-1, $sTxtTip)
 			GUICtrlSetOnEvent(-1, "chkUpgradeWarden")
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
-
+    ; Boost for Magic Spell by RK MOD
 	$y += 50
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "Group_05", "Boost for Magic Spell"), $x - 20, $y - 20, $g_iSizeWGrpTab3, 50)
+	_GUICtrlCreateIcon($g_sLibIconPath, $eIcnBoostMagic, $x - 10, $y - 2, 24, 24)
+	$g_hChkBoostBMagic = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost",  "ChkBoostBMagic_Info_01", "Boost troops"), $x + 25, $y + 1, -1, -1)
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "ChkBoostBMagic_Info_02", "Enable this function to boost for Magic Spell."))
+			GUICtrlSetState(-1, $GUI_UNCHECKED)
+             GUICtrlSetOnEvent(-1, "chkBoostBMagic") 			
+		$g_hCmbBoostBrMagic = GUICtrlCreateCombo("", $x + 120, $y + 1, 60, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetData(-1, "0|1|2|3|4|5", "0")
+	$y += - 1
+    _GUICtrlCreateIcon($g_sLibIconPath, $eIcnBoostClMagic, $x + 190, $y + 1, 24, 24)	
+	$g_hChkBoostCMagic = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost",  "ChkBoostCMagic_Info_01", "Boost collectors"), $x + 225, $y + 1, -1, -1)
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "ChkBoostCMagic_Info_02", "Enable this function to boost for Magic Spell."))
+			GUICtrlSetState(-1, $GUI_UNCHECKED)
+             GUICtrlSetOnEvent(-1, "chkBoostCMagic") 			
+		$g_hCmbBoostClMagic = GUICtrlCreateCombo("", $x + 340, $y + 1, 60, 25, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetData(-1, "0|1|2|3|4|5", "0")		
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	
+	$y += 55
 	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Boost", "Group_04", "Boost Schedule"), $x - 20, $y - 20, $g_iSizeWGrpTab3, 70)
-
+    $y += - 5
 		$g_hLblBoosthour = GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "Hour", -1) & ":", $x, $y, -1, 15)
 			$sTxtTip = GetTranslatedFileIni("MBR Global GUI Design", "Only_during_hours", -1)
 			_GUICtrlSetTip(-1, $sTxtTip)
+			
 		$g_hLblBoosthours[0] = GUICtrlCreateLabel(" 0", $x + 30, $y)
 		$g_hLblBoosthours[1] = GUICtrlCreateLabel(" 1", $x + 45, $y)
 		$g_hLblBoosthours[2] = GUICtrlCreateLabel(" 2", $x + 60, $y)
@@ -966,7 +995,7 @@ Func CreateOptionsSubTab()
 
 	Local $sTxtTip = ""
 	Local $x = 25, $y = 45
-	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_01", "Training Idle Time"), $x - 20, $y - 20, 151, 294)
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_01", "Training Idle Time"), $x - 20, $y - 20, 171, 315)
 		$g_hChkCloseWhileTraining = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "ChkCloseWhileTraining", "Close While Training"), $x - 12, $y, 140, -1)
 			GUICtrlSetState(-1, $GUI_CHECKED)
 			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "ChkCloseWhileTraining_Info_01", "Option will exit CoC game for time required to complete TROOP training when SHIELD IS ACTIVE") & @CRLF & _
@@ -1051,6 +1080,19 @@ Func CreateOptionsSubTab()
 		$g_hLblWaitingInMinutes = GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "min.", "min."), $x + 84, $y + 3, -1, -1)
 			_GUICtrlSetTip(-1, $sTxtTip)
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	
+	;Max logout time( mandryd) - RK MOD   
+	$y += 28
+		$g_hChkTrainLogoutMaxTime = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "TrainLogoutMaxTime", "Max Logout Time") & ": ", $x - 14, $y, -1, -1)
+			$sTxtTip = GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "TrainLogoutMaxTime_Info_01", "Only allow logout for a maximum amount of time")
+			_GUICtrlSetTip(-1, $sTxtTip)
+			GUICtrlSetState(-1, $GUI_UNCHECKED)
+			GUICtrlSetOnEvent(-1, "chkTrainLogoutMaxTime")
+		$g_hTxtTrainLogoutMaxTime = GUICtrlCreateInput("4", $x + 95, $y + 2, 25, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
+			_GUICtrlSetTip(-1, $sTxtTip)
+			GUICtrlSetLimit(-1, 2)
+		$g_hLblTrainLogoutMaxTime = GUICtrlCreateLabel("min.", $x + 127, $y + 4, -1, -1)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 	$y += 53
 	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_02", "Train Click Timing"), $x - 20, $y - 20, 151, 60)
@@ -1069,9 +1111,12 @@ Func CreateOptionsSubTab()
 			GUICtrlSetOnEvent(-1, "sldTrainITDelay")
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
-	$x = 25 + 151 + 5
+
+  
+
+	$x = 55 + 151 + 5
 	$y = 45
-	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_03", "Training Add Random Delay"), $x - 20, $y - 20, 173, 81)
+	GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_03", "Training Add Random Delay"), $x - 20, $y - 20, 240, 91)
 	$y += 15
 		$g_hChkTrainAddRandomDelayEnable = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "ChkTrainAddRandomDelayEnable", "Add Random Delay"), $x + 18, $y - 11, 130, -1)
 			$sTxtTip = GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "ChkTrainAddRandomDelayEnable_Info_01", "Add random delay between two calls of train army.") & @CRLF & _
@@ -1091,6 +1136,19 @@ Func CreateOptionsSubTab()
 		$g_hTxtAddRandomDelayMax = GUICtrlCreateInput($g_iTrainAddRandomDelayMax, $x + 82, $y - 2, 25, 18, BitOR($GUI_SS_DEFAULT_INPUT, $ES_CENTER, $ES_NUMBER))
 			GUICtrlSetLimit(-1, 999)
 		$g_hLblAddDelayIdlePhaseSec = GUICtrlCreateLabel(GetTranslatedFileIni("MBR Global GUI Design", "sec.", "sec."), $x + 110, $y, 20, 30)
+	GUICtrlCreateGroup("", -99, -99, 1, 1)
+	
+	; Check Grand Warden Mode - RK MOD
+	$x = 55 + 151 + 5
+	$y = 135
+		GUICtrlCreateGroup(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "Group_04", "Check Grand Warden Mode"), $x - 20, $y - 20, 173, 50)
+		$g_hChkCheckWardenMode = GUICtrlCreateCheckbox(GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "CheckWardenMode", "Check Mode") & ": ", $x - 10, $y)
+			GUICtrlSetOnEvent(-1, "chkCheckWardenMode")
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "CheckWardenMode_Info_01", "Enable this Option if you want to check in which Mode the Grand Warden is and change if needed"))
+		$g_hCmbCheckWardenMode = GUICtrlCreateCombo("", $x + 80, $y, 60, 18, BitOR($CBS_DROPDOWNLIST, $CBS_AUTOHSCROLL))
+			GUICtrlSetState(-1, $GUI_DISABLE)
+			GUICtrlSetData(-1, "Ground|Air", "Ground")
+			_GUICtrlSetTip(-1, GetTranslatedFileIni("MBR GUI Design Child Attack - Troops_Options", "CheckWardenMode_Info_02", "Select the Mode your Warden needs to have for attacks"))
 	GUICtrlCreateGroup("", -99, -99, 1, 1)
 
 EndFunc   ;==>CreateOptionsSubTab

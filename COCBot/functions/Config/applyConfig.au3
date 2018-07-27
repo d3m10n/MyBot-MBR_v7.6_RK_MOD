@@ -1934,6 +1934,10 @@ Func ApplyConfig_600_35_1($TypeReadSave)
 			chkAutoResume()
 			GUICtrlSetState($g_hChkDisableNotifications, $g_bDisableNotifications ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkFixClanCastle, $g_bForceClanCastleDetection ? $GUI_CHECKED : $GUI_UNCHECKED)
+			
+			GUICtrlSetState($g_hChkOnlySCIDAccounts, $g_bOnlySCIDAccounts ? $GUI_CHECKED : $GUI_UNCHECKED)
+			_GUICtrlComboBox_SetCurSel($g_hCmbWhatSCIDAccount2Use, $g_iWhatSCIDAccount2Use)
+			
 			GUICtrlSetState($g_hChkLabCheck, $g_iChkLabCheck = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
    		    chkLabCheck()
 		Case "Save"
@@ -1968,6 +1972,10 @@ Func ApplyConfig_600_35_1($TypeReadSave)
 			$g_iAutoResumeTime = GUICtrlRead($g_hTxtAutoResumeTime)
 			$g_bDisableNotifications = (GUICtrlRead($g_hChkDisableNotifications) = $GUI_CHECKED)
 			$g_bForceClanCastleDetection = (GUICtrlRead($g_hChkFixClanCastle) = $GUI_CHECKED)
+			
+			$g_bOnlySCIDAccounts = (GUICtrlRead($g_hChkOnlySCIDAccounts) = $GUI_CHECKED)
+			$g_iWhatSCIDAccount2Use = _GUICtrlComboBox_GetCurSel($g_hCmbWhatSCIDAccount2Use)
+			
 			$g_iChkLabCheck = GUICtrlRead($g_hChkLabCheck) = $GUI_CHECKED ? 1 : 0
 	EndSwitch
 EndFunc   ;==>ApplyConfig_600_35_1
@@ -1976,6 +1984,21 @@ Func ApplyConfig_600_35_2($TypeReadSave)
 	; <><><><> Bot / Profile / Switch Account <><><><>
 	Switch $TypeReadSave
 		Case "Read"
+			;FarmSchedule
+			For $i = 0 To 7
+				GUICtrlSetState($g_ahChkSetFarm[$i], $g_abChkSetFarm[$i] = 1 ? $GUI_CHECKED : $GUI_UNCHECKED)
+
+				_GUICtrlComboBox_SetCurSel($g_ahCmbAction1[$i], $g_aiCmbAction1[$i])
+				_GUICtrlComboBox_SetCurSel($g_ahCmbCriteria1[$i], $g_aiCmbCriteria1[$i])
+				GUICtrlSetData($g_ahTxtResource1[$i], $g_aiTxtResource1[$i])
+				_GUICtrlComboBox_SetCurSel($g_ahCmbTime1[$i], $g_aiCmbTime1[$i])
+
+				_GUICtrlComboBox_SetCurSel($g_ahCmbAction2[$i], $g_aiCmbAction2[$i])
+				_GUICtrlComboBox_SetCurSel($g_ahCmbCriteria2[$i], $g_aiCmbCriteria2[$i])
+				GUICtrlSetData($g_ahTxtResource2[$i], $g_aiTxtResource2[$i])
+				_GUICtrlComboBox_SetCurSel($g_ahCmbTime2[$i], $g_aiCmbTime2[$i])
+			Next
+
 			_GUICtrlComboBox_SetCurSel($g_hCmbSwitchAcc, $g_iCmbSwitchAcc)
 			GUICtrlSetState($g_hChkSwitchAcc, $g_bChkSwitchAcc ? $GUI_CHECKED : $GUI_UNCHECKED)
 			If $g_bChkGooglePlay Then
@@ -2012,7 +2035,23 @@ Func ApplyConfig_600_35_2($TypeReadSave)
 			Next
 			_GUICtrlComboBox_SetCurSel($g_hCmbTrainTimeToSkip, $g_iTrainTimeToSkip)
 			_cmbSwitchAcc(False)
+			
 		Case "Save"
+			;FarmSchedule
+			For $i = 0 To 7
+				$g_abChkSetFarm[$i] = (GUICtrlRead($g_ahChkSetFarm[$i]) = $GUI_CHECKED)
+
+				$g_aiCmbAction1[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbAction1[$i])
+				$g_aiCmbCriteria1[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbCriteria1[$i])
+				$g_aiTxtResource1[$i] = GUICtrlRead($g_ahTxtResource1[$i])
+				$g_aiCmbTime1[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbTime1[$i])
+
+				$g_aiCmbAction2[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbAction2[$i])
+				$g_aiCmbCriteria2[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbCriteria2[$i])
+				$g_aiTxtResource2[$i] = GUICtrlRead($g_ahTxtResource2[$i])
+				$g_aiCmbTime2[$i] = _GUICtrlComboBox_GetCurSel($g_ahCmbTime2[$i])
+			Next
+
 			$g_iCmbSwitchAcc = _GUICtrlComboBox_GetCurSel($g_hCmbSwitchAcc)
 			$g_bChkSwitchAcc = (GUICtrlRead($g_hChkSwitchAcc) = $GUI_CHECKED)
 			$g_bChkGooglePlay = (GUICtrlRead($g_hRadSwitchGooglePlay) = $GUI_CHECKED)
@@ -2209,6 +2248,9 @@ Func ApplyConfig_641_1($TypeReadSave)
 				GUICtrlSetState($g_hCmbMinimumTimeClose, $GUI_ENABLE)
 				GUICtrlSetState($g_hLblSymbolWaiting, $GUI_ENABLE)
 				GUICtrlSetState($g_hLblWaitingInMinutes, $GUI_ENABLE)
+				; Max logout time - RK MOD
+				GUICtrlSetState($g_hChkTrainLogoutMaxTime, $GUI_ENABLE)
+				chkTrainLogoutMaxTime()
 			Else
 				GUICtrlSetState($g_hChkCloseWhileTraining, $GUI_UNCHECKED)
 				_GUI_Value_STATE("DISABLE", $groupCloseWhileTraining)
@@ -2216,6 +2258,8 @@ Func ApplyConfig_641_1($TypeReadSave)
 				GUICtrlSetState($g_hCmbMinimumTimeClose, $GUI_DISABLE)
 				GUICtrlSetState($g_hLblSymbolWaiting, $GUI_DISABLE)
 				GUICtrlSetState($g_hLblWaitingInMinutes, $GUI_DISABLE)
+				; Max logout time - RK MOD
+				GUICtrlSetState($g_hChkTrainLogoutMaxTime, $GUI_DISABLE)
 			EndIf
 			GUICtrlSetState($g_hChkCloseWithoutShield, $g_bCloseWithoutShield ? $GUI_CHECKED : $GUI_UNCHECKED)
 			GUICtrlSetState($g_hChkCloseEmulator, $g_bCloseEmulator ? $GUI_CHECKED : $GUI_UNCHECKED)

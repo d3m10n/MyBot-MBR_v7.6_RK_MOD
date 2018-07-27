@@ -32,26 +32,26 @@ Func SetStatsGoblinsXP()
 
 	If $DebugSX = 1 Then
 		Setlog("$CurrentAccountGoblinsXP:" & $CurrentAccountGoblinsXP, $COLOR_DEBUG)
-		Setlog("$g_iCurrentAccount:" & $g_iCurrentAccount, $COLOR_DEBUG)
+		Setlog("$g_iCurAccount:" & $g_iCurAccount, $COLOR_DEBUG)
 		Setlog("$iStartXP:" & $iStartXP, $COLOR_DEBUG)
 	EndIf
 
-	If $g_iCurrentAccount = $CurrentAccountGoblinsXP Then
+	If $g_iCurAccount = $CurrentAccountGoblinsXP Then
 		If $DebugSX = 1 Then Setlog("'Same' account Update Values!", $COLOR_DEBUG)
 		; Store the values from this account
-		$StatsAccounts[$g_iCurrentAccount][0] = $iStartXP
-		$StatsAccounts[$g_iCurrentAccount][1] = $iCurrentXP
-		$StatsAccounts[$g_iCurrentAccount][2] = $iGainedXP
-		$StatsAccounts[$g_iCurrentAccount][3] = $iGainedXPHour
+		$StatsAccounts[$g_iCurAccount][0] = $iStartXP
+		$StatsAccounts[$g_iCurAccount][1] = $iCurrentXP
+		$StatsAccounts[$g_iCurAccount][2] = $iGainedXP
+		$StatsAccounts[$g_iCurAccount][3] = $iGainedXPHour
 	Else
 		If $DebugSX = 1 Then Setlog("'Other' account Update Values!", $COLOR_DEBUG)
 		; Restore the previous values from this account
-		$iStartXP = $StatsAccounts[$g_iCurrentAccount][0]
-		$iCurrentXP = $StatsAccounts[$g_iCurrentAccount][1]
-		$iGainedXP = $StatsAccounts[$g_iCurrentAccount][2]
-		$iGainedXPHour = $StatsAccounts[$g_iCurrentAccount][3]
+		$iStartXP = $StatsAccounts[$g_iCurAccount][0]
+		$iCurrentXP = $StatsAccounts[$g_iCurAccount][1]
+		$iGainedXP = $StatsAccounts[$g_iCurAccount][2]
+		$iGainedXPHour = $StatsAccounts[$g_iCurAccount][3]
 		; Update the account number
-		$CurrentAccountGoblinsXP = $g_iCurrentAccount
+		$CurrentAccountGoblinsXP = $g_iCurAccount
 	EndIf
 	$FirstRun = False
 
@@ -829,7 +829,14 @@ Func IsInGoblinPicnic($Retry = True, $maxRetry = 30, $timeBetweenEachRet = 300)
 	Local $result = ""
 	While $Found = False
 		If _Sleep($timeBetweenEachRet) Then Return False
-		If IsInAttackSuperXP() = False Then ContinueLoop
+        If Not IsInAttackSuperXP() Then
+            $Counter += 1
+            If $Counter = $maxRetry Then
+                $Found = False
+                ExitLoop
+            EndIf
+            ContinueLoop
+        EndIf
 
 		$result = multiMatchesPixelOnly($directory, 0, "FV", "FV", "", 0, 1000, 0, 0, 111, 31)
 		If $DebugSX = 1 Then SetLog("SX|IGP|$result=" & $result)

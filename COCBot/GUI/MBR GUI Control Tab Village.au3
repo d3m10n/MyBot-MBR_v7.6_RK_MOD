@@ -28,23 +28,30 @@
 	; $g_bChkCollect = (GUICtrlRead($g_hChkCollect) = $GUI_CHECKED)
 ; EndFunc   ;==>ChkCollect
 
+; Request troops for defense Add RK MOD
+Func chkRequestDefense()
+	If GUICtrlRead($g_hChkRequestTroopsEnableDefense) = $GUI_CHECKED Then
+		For $i = $g_hTxtRequestCCDefense To $g_hTxtRequestDefenseEarly
+			GUICtrlSetState($i, $GUI_ENABLE)
+		Next
+	Else
+		For $i = $g_hTxtRequestCCDefense To $g_hTxtRequestDefenseEarly
+			GUICtrlSetState($i, $GUI_DISABLE)
+		Next
+	EndIf
+EndFunc   ;==>chkRequestDefense
+
 Func chkRequestCCHours()
 	Local $bWasRedraw = SetRedrawBotWindow(False, Default, Default, Default, "chkRequestCCHours")
 
 	If GUICtrlRead($g_hChkRequestTroopsEnable) = $GUI_CHECKED Then
 		GUICtrlSetState($g_hTxtRequestCC, $GUI_SHOW + $GUI_ENABLE)
-		For $i = $g_hChkSkipRequestCC To $g_hLblRequestCCHoursPM  ; Skip request CC - Demen
-			GUICtrlSetState($i, $GUI_ENABLE)
-		Next
 		For $i = $g_hChkReqCCFirst To $g_hLblRequestCCHoursPM 
  			GUICtrlSetState($i, $GUI_ENABLE)
  		Next
-		chkSkipRequestCC() ; Skip request CC - Demen
+		chkSkipRequestCC() ; Skip request CC - Add RK MOD
 	Else
 		GUICtrlSetState($g_hTxtRequestCC, $GUI_SHOW + $GUI_DISABLE)
-		For $i = $g_hChkSkipRequestCC To $g_hLblRequestCCHoursPM ; Skip request CC - Demen
-			GUICtrlSetState($i, $GUI_DISABLE)
-		Next
 		For $i = $g_hChkReqCCFirst To $g_hLblRequestCCHoursPM
  			GUICtrlSetState($i, $GUI_DISABLE)
  		Next
@@ -53,7 +60,7 @@ Func chkRequestCCHours()
 	SetRedrawBotWindowControls($bWasRedraw, $g_hGrpRequestCC, "chkRequestCCHours")
 EndFunc   ;==>chkRequestCCHours
 
-; Skip request CC - Demen
+; Skip request CC - Add RK MOD
 Func chkSkipRequestCC()
 	If GUICtrlRead($g_hChkSkipRequestCC) = $GUI_CHECKED Then
 		For $i = $g_hTxtSkipRequestCCTroop To $g_hTxtSkipRequestCCSpell

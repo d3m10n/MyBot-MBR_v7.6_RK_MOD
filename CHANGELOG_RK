@@ -48,7 +48,7 @@
 -- Check Warden Mode.
 -- Upgrade Management.
 -- Farming Schedule
--- Archers Full for Double train army
+-- Archers Full for Double train army.
 
 **IMPROVED AND FIXED**
 
@@ -57,3 +57,26 @@
 -- Skip Request CC.
 -- Goblin XP.
 -- Classic Four Finger.
+
+
+
+
+**v3.0.3**
+
+Update to v 7.6
+
+**Added**
+
+-- GTFO.
+-- Wall/Building Upgrading Priority.
+-- Check Collector Outside.
+-- Skip receive/request CC if limit is higher.
+-- Smart Train.
+
+**IMPROVED AND FIXED**
+
+-- Check Stop For War.
+-- Double train army.
+-- AUTO-CAMPS.
+-- ChatBot. 
+-- Russian Request.
